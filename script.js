@@ -41,11 +41,53 @@ async function searchArtists(artist) {
         }
 
         const data = await response.json();
-        const artistsArray = data.artists.items.map(item => item.name);
-        console.log(artistsArray);
+        const artistsArray = data.artists.items.map(item => ({
+            name: item.name,
+            imageUrl: item.images[1] ? item.images[1].url : ''
+        }));
+        displayResults(artistsArray);
     } catch(error) {
         console.error('Error fetching artists:', error);
     }
 }
 
-searchArtists('Kanye West')
+function displayResults(artistsArray) {
+    const resultsContainer = document.getElementById('artists');
+    resultsContainer.className = 'artists';
+    if (!resultsContainer) {
+        console.error('Results container not found!');
+        return;
+    }
+    
+    resultsContainer.innerHTML = '';
+
+    artistsArray.forEach(artist => {
+        const artistElement = document.createElement('div');
+        artistElement.className = 'artist';
+
+        const artistImage = document.createElement('img');
+        artistImage.src = artist.imageUrl;
+        artistImage.alt = artist.name;
+        artistImage.className = 'artist-image';
+
+        const artistName = document.createElement('div');
+        artistName.textContent = artist.name;
+        artistName.className = 'artist-name';
+
+        artistElement.appendChild(artistImage);
+        artistElement.appendChild(artistName);
+
+        resultsContainer.appendChild(artistElement);
+    });
+}
+
+document.getElementById('search-bar').addEventListener('input', function () {
+    const artist = this.value;
+    clearTimeout(this.searchTimeout);
+
+    this.searchTimeout = setTimeout(() => {
+        if (artist) {
+            searchArtists(artist);
+        }
+    }, 500);
+});

@@ -1,3 +1,43 @@
-h1 {
-    color: blue;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    color: #ffffff;
+    background-color: #000000;
+}
+
+.artists {
+    margin: 8px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    border-radius: 6px;
+    background-color: #121212;
+}
+
+.artist {
+    padding: 16px;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #1f1f1f;
+    }
+}
+
+.artist-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+    box-shadow: 0 0 16px 8px #00000066;
+}
+
+.artist-name {
+    padding-top: 8px;
 }
