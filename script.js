@@ -43,7 +43,7 @@ async function searchArtists(artist) {
         const data = await response.json();
         const artistsArray = data.artists.items.map(item => ({
             name: item.name,
-            imageUrl: item.images[1] ? item.images[1].url : ''
+            imageUrl: item.images[1] ? item.images[1].url : '/fallback-icon.svg'
         }));
         displayResults(artistsArray);
     } catch(error) {
@@ -69,6 +69,9 @@ function displayResults(artistsArray) {
         artistImage.src = artist.imageUrl;
         artistImage.alt = artist.name;
         artistImage.className = 'artist-image';
+        artistImage.onload = () => {
+            artistImage.style.animation = 'fadeInZoom .4s ease-in-out forwards';
+        };
 
         const artistName = document.createElement('div');
         artistName.textContent = artist.name;

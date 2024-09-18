@@ -47,11 +47,24 @@ body {
     object-fit: cover;
     border-radius: 100%;
     box-shadow: 0 0 16px 8px #00000066;
+    background-color: #333333;
+    opacity: 0;
+}
+
+@keyframes fadeInZoom {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .artist-name {
+    height: 55px;
     padding-top: 8px;
     font-weight: 600;
+    overflow: hidden;
 }
 
 #search-bar {
