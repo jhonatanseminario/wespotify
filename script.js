@@ -1,6 +1,6 @@
 async function getToken() {
-    const clientId = 'CLIENT_ID';
-    const clientSecret = 'CLIENT_SECRET';
+    const clientId = '0d2db64a6bff43769f27c1ee87901f09';
+    const clientSecret = '963dc919e09344dcb5377168e44bb941';
     const endpoint = 'https://accounts.spotify.com/api/token';
     const credentials = btoa(`${clientId}:${clientSecret}`);
   
