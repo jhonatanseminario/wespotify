@@ -1,14 +1,18 @@
+@font-face {
+    font-family: 'Spotify Mix';
+    src: url('/spotify-mix.woff2') format('woff2');
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    letter-spacing: 0.2px;
+    font-family: 'Spotify Mix', sans-serif;
 }
 
 body {
     position: relative;
     height: 100vh;
-    font-family: 'Poppins', sans-serif;
     text-align: center;
     color: #ffffff;
     background-color: #000000;
@@ -17,16 +21,16 @@ body {
 .artists {
     position: absolute;
     top: 64px;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
     padding: 32px 24px;
     overflow: scroll;
     min-height: 600px;
     min-width: 800px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    border-radius: 6px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    border-radius: 8px;
     background-color: #121212;
 }
 
@@ -71,6 +75,7 @@ body {
     width: 480px;
     height: 48px;
     margin-top: 8px;
+    margin-left: 88px;
     padding-inline: 16px;
     border: none;
     border-radius: 24px;
@@ -84,6 +89,7 @@ body {
     &::placeholder {
         color: #b3b3b3;
         letter-spacing: 0.2px;
+        font-family: 'Spotify Mix', sans-serif;
     }
 
     &:hover {
@@ -96,4 +102,12 @@ body {
         outline-offset: -3px;
         cursor: text;
     }
+}
+
+#spotify-icon {
+    position: absolute;
+    top: 16px;
+    left: 28px;
+    height: 32px;
+    cursor: pointer;
 }
