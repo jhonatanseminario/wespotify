@@ -32,7 +32,7 @@ async function searchArtists(artist) {
     const token = await getToken();
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist`, {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
