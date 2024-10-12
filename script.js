@@ -3,7 +3,7 @@ async function getToken() {
     const clientSecret = '963dc919e09344dcb5377168e44bb941';
     const endpoint = 'https://accounts.spotify.com/api/token';
     const credentials = btoa(`${clientId}:${clientSecret}`);
-  
+
     try {
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -28,11 +28,12 @@ async function getToken() {
     }
 }
 
-async function searchArtists(artist) {
+async function searchArtists(artist, offset) {
     const token = await getToken();
+    currentArtistQuery = artist;
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30`, {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30&offset=${offset}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -45,21 +46,22 @@ async function searchArtists(artist) {
             name: item.name,
             imageUrl: item.images[1] ? item.images[1].url : '/fallback-icon.svg'
         }));
-        displayResults(artistsArray);
+        displayResults(artistsArray, offset);
     } catch(error) {
         console.error('Error fetching artists:', error);
     }
 }
 
-function displayResults(artistsArray) {
+function displayResults(artistsArray, offset) {
     const resultsContainer = document.querySelector('.artists-container');
-    resultsContainer.className = 'artists-container';
     if (!resultsContainer) {
         console.error('Results container not found!');
         return;
     }
     
-    resultsContainer.innerHTML = '';
+    if (offset === 0) {
+        resultsContainer.innerHTML = '';
+    }
 
     artistsArray.forEach(artist => {
         const artistElement = document.createElement('div');
@@ -90,7 +92,13 @@ document.querySelector('.search-bar').addEventListener('input', function () {
 
     this.searchTimeout = setTimeout(() => {
         if (artist) {
-            searchArtists(artist);
+            offset = 0;
+            searchArtists(artist, offset);
         }
     }, 500);
+});
+
+document.querySelector('.load-more-btn').addEventListener('click', function () {
+    offset += 30;
+    searchArtists(currentArtistQuery, offset);
 });
