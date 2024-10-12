@@ -18,7 +18,7 @@ body {
     background-color: #000000;
 }
 
-.artists {
+.artists-container {
     position: absolute;
     top: 64px;
     bottom: 16px;
@@ -26,7 +26,7 @@ body {
     right: 16px;
     padding: 32px 24px;
     overflow: scroll;
-    min-height: 600px;
+    min-height: 500px;
     min-width: 800px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -34,7 +34,7 @@ body {
     background-color: #121212;
 }
 
-.artist {
+.artist-container {
     padding: 16px;
     aspect-ratio: 1 / 1;
     border-radius: 6px;
@@ -71,12 +71,18 @@ body {
     overflow: hidden;
 }
 
-#search-bar {
+.search-container {
+    position: relative;
+    min-width: 600px;
+}
+
+.search-bar {
     width: 480px;
     height: 48px;
     margin-top: 8px;
-    margin-left: 88px;
-    padding-inline: 16px;
+    margin-left: 80px;
+    padding-right: 16px;
+    padding-left: 48px;
     border: none;
     border-radius: 24px;
     outline: 3px solid transparent;
@@ -84,11 +90,10 @@ body {
     color: #ffffff;
     background-color: #1f1f1f;
     cursor: pointer;
-    transition: all 0.2s ease-in;
+    transition: all 0.3s ease-in;
     
     &::placeholder {
         color: #b3b3b3;
-        letter-spacing: 0.2px;
         font-family: 'Spotify Mix', sans-serif;
     }
 
@@ -102,12 +107,34 @@ body {
         outline-offset: -3px;
         cursor: text;
     }
+
+    &:hover ~ .search-icon {
+        filter: brightness(100);
+    }
+
+    &:focus ~ .search-icon {
+        filter: brightness(100);
+    }
 }
 
-#spotify-icon {
+.search-icon {
+    position: relative;
+    top: 7px;
+    right: 470px;
+    height: 25px;
+    width: 24px;
+    cursor: pointer;
+
+    &:hover {
+        filter: brightness(100);
+    }
+}
+
+.spotify-icon {
     position: absolute;
     top: 16px;
     left: 28px;
     height: 32px;
     cursor: pointer;
+    z-index: 1;
 }

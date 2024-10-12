@@ -52,8 +52,8 @@ async function searchArtists(artist) {
 }
 
 function displayResults(artistsArray) {
-    const resultsContainer = document.getElementById('artists');
-    resultsContainer.className = 'artists';
+    const resultsContainer = document.querySelector('.artists-container');
+    resultsContainer.className = 'artists-container';
     if (!resultsContainer) {
         console.error('Results container not found!');
         return;
@@ -63,7 +63,7 @@ function displayResults(artistsArray) {
 
     artistsArray.forEach(artist => {
         const artistElement = document.createElement('div');
-        artistElement.className = 'artist';
+        artistElement.className = 'artist-container';
 
         const artistImage = document.createElement('img');
         artistImage.src = artist.imageUrl;
@@ -84,7 +84,7 @@ function displayResults(artistsArray) {
     });
 }
 
-document.getElementById('search-bar').addEventListener('input', function () {
+document.querySelector('.search-bar').addEventListener('input', function () {
     const artist = this.value;
     clearTimeout(this.searchTimeout);
 
