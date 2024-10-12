@@ -1,3 +1,17 @@
+function $(selector) {
+    return document.querySelector(selector);
+}
+
+function $$(selector) {
+    return document.querySelectorAll(selector);
+}
+
+function on(event, handler) {
+    this.addEventListener(event, handler);
+}
+
+Node.prototype.on = on;
+
 async function getToken() {
     const clientId = '0d2db64a6bff43769f27c1ee87901f09';
     const clientSecret = '963dc919e09344dcb5377168e44bb941';
@@ -85,11 +99,11 @@ function displayResults(artistsArray, offset) {
     });
 }
 
-const resultsContainer = document.querySelector('.artists-container');
-const searchBar = document.querySelector('.search-bar')
+const resultsContainer = $('.artists-container');
+const searchBar = $('.search-bar')
 
-resultsContainer.addEventListener('scroll', handleScroll);
-searchBar.addEventListener('input', debouncedSearch);
+resultsContainer.on('scroll', handleScroll);
+searchBar.on('input', debouncedSearch);
 
 let isLoading = false;
 
