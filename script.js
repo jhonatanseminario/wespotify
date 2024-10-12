@@ -53,12 +53,11 @@ async function searchArtists(artist, offset) {
 }
 
 function displayResults(artistsArray, offset) {
-    const resultsContainer = document.querySelector('.artists-container');
     if (!resultsContainer) {
         console.error('Results container not found!');
         return;
     }
-    
+
     if (offset === 0) {
         resultsContainer.innerHTML = '';
     }
@@ -86,7 +85,25 @@ function displayResults(artistsArray, offset) {
     });
 }
 
-document.querySelector('.search-bar').addEventListener('input', function () {
+const resultsContainer = document.querySelector('.artists-container');
+const searchBar = document.querySelector('.search-bar')
+
+resultsContainer.addEventListener('scroll', handleScroll);
+searchBar.addEventListener('input', debouncedSearch);
+
+let isLoading = false;
+
+function handleScroll() {
+    if (!isLoading && resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 32) {
+        isLoading = true;
+        offset += 30;
+        searchArtists(currentArtistQuery, offset).finally(() => {
+            isLoading = false;
+        });
+    }
+}
+
+function debouncedSearch() {
     const artist = this.value;
     clearTimeout(this.searchTimeout);
 
@@ -96,9 +113,4 @@ document.querySelector('.search-bar').addEventListener('input', function () {
             searchArtists(artist, offset);
         }
     }, 500);
-});
-
-document.querySelector('.load-more-btn').addEventListener('click', function () {
-    offset += 30;
-    searchArtists(currentArtistQuery, offset);
-});
+}
