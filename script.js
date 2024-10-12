@@ -85,7 +85,7 @@ function displayResults(artistsArray, offset) {
         artistImage.alt = artist.name;
         artistImage.className = 'artist-image';
         artistImage.onload = () => {
-            artistImage.style.animation = 'fadeInZoom .4s ease-in-out forwards';
+            artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
         };
 
         const artistName = document.createElement('div');
