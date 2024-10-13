@@ -122,9 +122,9 @@ async function fetchArtistDetails(artistID) {
 
         const artistCover = document.createElement('div');
         artistCover.className = 'cover-image';
-        
+
         const artistImage = document.createElement('img');
-        artistImage.src = artistDetails.images[0].url;
+        artistImage.src = artistDetails.images[1].url;
         artistImage.alt = `${artistDetails.name} - Imagen`;
         artistImage.className = 'profile-image';
 

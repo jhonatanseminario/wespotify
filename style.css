@@ -195,4 +195,6 @@ body {
     font-weight: 800;
     font-size: 96px;
     z-index: 20;
+    user-select: none;
+    animation: textAnimation 1.2s ease-in-out forwards;
 }
