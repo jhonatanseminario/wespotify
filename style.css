@@ -198,3 +198,15 @@ body {
     user-select: none;
     animation: textAnimation 1.2s ease-in-out forwards;
 }
+
+.tracks-container {
+    position: absolute;
+    top: 600px;
+    left: 128px;
+    text-align: left;
+    z-index: 30;
+}
+
+.track-item {
+    padding: 8px;
+}

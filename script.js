@@ -104,6 +104,26 @@ function displayResults(artistsArray, offset) {
     });
 }
 
+async function fetchArtistTopTracks(artistID) {
+    const token = await getToken();
+    
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/artists/${artistID}/top-tracks?market=US`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la API: ${response.status}`);
+        }
+
+        const topTracksData = await response.json();
+        return topTracksData.tracks;
+        
+    } catch (error) {
+        console.error('Error fetching artist top tracks:', error);
+    }
+}
+
 async function fetchArtistDetails(artistID) {
     const token = await getToken();
     
@@ -135,6 +155,20 @@ async function fetchArtistDetails(artistID) {
         artistCover.appendChild(artistImage);
         resultsContainer.appendChild(artistCover);
         resultsContainer.appendChild(artistInfo);
+
+        const topTracks = await fetchArtistTopTracks(artistID);
+
+        const tracksContainer = document.createElement('div');
+        tracksContainer.className = 'tracks-container';
+
+        topTracks.forEach(track => {
+            const trackElement = document.createElement('div');
+            trackElement.className = 'track-item';
+            trackElement.textContent = track.name;
+            tracksContainer.appendChild(trackElement);
+        });
+
+        resultsContainer.appendChild(tracksContainer);
 
     } catch (error) {
         console.error('Error fetching artist details:', error);
