@@ -97,6 +97,7 @@ function displayResults(artistsArray, offset) {
         artistElement.appendChild(artistName);
 
         artistElement.on('click', () => {
+            resultsContainer.removeEventListener('scroll', handleScroll);
             fetchArtistDetails(artist.id);
         });
 
@@ -118,7 +119,7 @@ async function fetchArtistTopTracks(artistID) {
 
         const topTracksData = await response.json();
         return topTracksData.tracks;
-        
+
     } catch (error) {
         console.error('Error fetching artist top tracks:', error);
     }
@@ -137,7 +138,7 @@ async function fetchArtistDetails(artistID) {
         }
 
         const artistDetails = await response.json();
-
+        isArtistView = true;
         resultsContainer.innerHTML = '';
 
         const artistCover = document.createElement('div');
@@ -175,6 +176,13 @@ async function fetchArtistDetails(artistID) {
     }
 }
 
+function backToArtistList() {
+    resultsContainer.innerHTML = '';
+    isArtistView = false;
+    offset = 0;
+    searchArtists(currentArtistQuery, offset);
+}
+
 const resultsContainer = $('.artists-container');
 const searchBar = $('.search-bar')
 
@@ -182,8 +190,11 @@ resultsContainer.on('scroll', handleScroll);
 searchBar.on('input', debouncedSearch);
 
 let isLoading = false;
+let isArtistView = false;
 
 function handleScroll() {
+    if (isArtistView) return;
+
     if (!isLoading && resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 32) {
         isLoading = true;
         offset += 30;
@@ -200,6 +211,9 @@ function debouncedSearch() {
     this.searchTimeout = setTimeout(() => {
         if (artist) {
             offset = 0;
+            isArtistView = false;
+            resultsContainer.innerHTML = '';
+            resultsContainer.on('scroll', handleScroll);
             searchArtists(artist, offset);
         }
     }, 500);
