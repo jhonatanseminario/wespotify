@@ -23,6 +23,7 @@ body {
     background-color: #000000;
 }
 
+.main-container,
 .artists-container {
     position: absolute;
     top: 64px;
@@ -38,6 +39,10 @@ body {
     border-radius: 8px;
     overflow-x: hidden;
     background-color: #121212;
+}
+
+.main-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
 
 .artist-container {

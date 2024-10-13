@@ -42,6 +42,53 @@ async function getToken() {
     }
 }
 
+window.on('DOMContentLoaded', () => {
+    fetchTopArtists();
+});
+
+$('.spotify-icon').on('click', () => {
+     fetchTopArtists();
+});
+
+async function fetchTopArtists() {
+    const token = await getToken();
+    const top50GlobalPlaylistId = '37i9dQZEVXbMDoHDwVN2tF';
+
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${top50GlobalPlaylistId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const artistsMap = new Map();
+        data.tracks.items.forEach(item => {
+            const artist = item.track.artists[0];
+            if (!artistsMap.has(artist.id)) {
+                artistsMap.set(artist.id, {
+                    id: artist.id,
+                    name: artist.name,
+                    imageUrl: item.track.album.images[1] ? item.track.album.images[1].url : '/fallback-icon.svg'
+                });
+            }
+        });
+
+        const uniqueArtistsArray = Array.from(artistsMap.values()).slice(0, 12);
+
+        resultsContainer.classList.remove('artists-container');
+        resultsContainer.classList.add('main-container');
+
+        displayResults(uniqueArtistsArray, 0);
+
+    } catch (error) {
+        console.error('Error fetching top artists:', error);
+    }
+}
+
 async function searchArtists(artist, offset) {
     const token = await getToken();
     currentArtistQuery = artist;
@@ -209,6 +256,8 @@ function debouncedSearch() {
     clearTimeout(this.searchTimeout);
 
     this.searchTimeout = setTimeout(() => {
+        resultsContainer.classList.add('artists-container');
+        resultsContainer.classList.remove('main-container');
         if (artist) {
             offset = 0;
             isArtistView = false;
