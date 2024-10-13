@@ -57,6 +57,7 @@ async function searchArtists(artist, offset) {
 
         const data = await response.json();
         const artistsArray = data.artists.items.map(item => ({
+            id: item.id,
             name: item.name,
             imageUrl: item.images[1] ? item.images[1].url : '/fallback-icon.svg'
         }));
@@ -95,8 +96,39 @@ function displayResults(artistsArray, offset) {
         artistElement.appendChild(artistImage);
         artistElement.appendChild(artistName);
 
+        artistElement.on('click', () => {
+            fetchArtistDetails(artist.id);
+        });
+
         resultsContainer.appendChild(artistElement);
     });
+}
+
+async function fetchArtistDetails(artistID) {
+    const token = await getToken();
+    
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/artists/${artistID}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la API: ${response.status}`);
+        }
+
+        const artistDetails = await response.json();
+
+        resultsContainer.innerHTML = '';
+
+        const artistInfo = document.createElement('div');
+        artistInfo.textContent = `${artistDetails.name}`;
+        artistInfo.className = 'artist-info';
+
+        resultsContainer.appendChild(artistInfo);
+
+    } catch (error) {
+        console.error('Error fetching artist details:', error);
+    }
 }
 
 const resultsContainer = $('.artists-container');
