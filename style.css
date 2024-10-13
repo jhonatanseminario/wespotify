@@ -3,6 +3,11 @@
     src: url('/spotify-mix.woff2') format('woff2');
 }
 
+@font-face {
+    font-family: 'Spotify Mix Title';
+    src: url('/spotify-mix-title.woff2') format('woff2');
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -31,6 +36,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     border-radius: 8px;
+    overflow-x: hidden;
     background-color: #121212;
 }
 
@@ -149,4 +155,44 @@ body {
     height: 32px;
     cursor: pointer;
     z-index: 1;
+}
+
+.cover-image {
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 300px;
+        z-index: 10;
+        background: linear-gradient(to right, #00000066, #00000033);
+    }
+}
+
+.profile-image {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    filter: blur(8px);
+    transform: scale(1.05);
+}
+
+.artist-info {
+    position: absolute;
+    top: 120px;
+    left: 16px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Spotify Mix Title', sans-serif;
+    font-weight: 800;
+    font-size: 96px;
+    z-index: 20;
 }

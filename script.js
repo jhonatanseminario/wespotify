@@ -120,10 +120,20 @@ async function fetchArtistDetails(artistID) {
 
         resultsContainer.innerHTML = '';
 
+        const artistCover = document.createElement('div');
+        artistCover.className = 'cover-image';
+        
+        const artistImage = document.createElement('img');
+        artistImage.src = artistDetails.images[0].url;
+        artistImage.alt = `${artistDetails.name} - Imagen`;
+        artistImage.className = 'profile-image';
+
         const artistInfo = document.createElement('div');
         artistInfo.textContent = `${artistDetails.name}`;
         artistInfo.className = 'artist-info';
 
+        artistCover.appendChild(artistImage);
+        resultsContainer.appendChild(artistCover);
         resultsContainer.appendChild(artistInfo);
 
     } catch (error) {
