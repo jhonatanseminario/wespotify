@@ -43,11 +43,15 @@ async function getToken() {
 }
 
 window.on('DOMContentLoaded', () => {
+    document.on('dragstart', (event) => event.preventDefault());
+    document.on('contextmenu', (event) => event.preventDefault());
+
     fetchTopArtists();
 });
 
 $('.spotify-icon').on('click', () => {
-     fetchTopArtists();
+    searchBar.value = '';
+    fetchTopArtists();
 });
 
 async function fetchTopArtists() {
@@ -114,6 +118,8 @@ async function searchArtists(artist, offset) {
     }
 }
 
+let isArtistFetched = false;
+
 function displayResults(artistsArray, offset) {
     if (!resultsContainer) {
         console.error('Results container not found!');
@@ -144,8 +150,15 @@ function displayResults(artistsArray, offset) {
         artistElement.appendChild(artistName);
 
         artistElement.on('click', () => {
-            resultsContainer.removeEventListener('scroll', handleScroll);
-            fetchArtistDetails(artist.id);
+            if (!isArtistFetched) {
+                isArtistFetched = true;
+                resultsContainer.removeEventListener('scroll', handleScroll);
+                fetchArtistDetails(artist.id);
+        
+                setTimeout(() => {
+                    isArtistFetched = false;
+                }, 1000);
+            }
         });
 
         resultsContainer.appendChild(artistElement);
@@ -206,7 +219,12 @@ async function fetchArtistDetails(artistID) {
 
         const topTracks = await fetchArtistTopTracks(artistID);
 
-        const tracksContainer = document.createElement('div');
+        let tracksContainer = resultsContainer.querySelector('.tracks-container');
+        if (tracksContainer) {
+            tracksContainer.remove();
+        }
+
+        tracksContainer = document.createElement('div');
         tracksContainer.className = 'tracks-container';
 
         topTracks.forEach(track => {
@@ -258,12 +276,15 @@ function debouncedSearch() {
     this.searchTimeout = setTimeout(() => {
         resultsContainer.classList.add('artists-container');
         resultsContainer.classList.remove('main-container');
+        
         if (artist) {
             offset = 0;
             isArtistView = false;
             resultsContainer.innerHTML = '';
             resultsContainer.on('scroll', handleScroll);
             searchArtists(artist, offset);
+        } else {
+            fetchTopArtists();
         }
     }, 500);
 }
