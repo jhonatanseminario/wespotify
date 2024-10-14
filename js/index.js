@@ -50,6 +50,8 @@ window.on('DOMContentLoaded', () => {
 });
 
 $('.spotify-icon').on('click', () => {
+    resultsContainer.classList.add('main-container');
+    resultsContainer.classList.remove('artists-container');
     searchBar.value = '';
     fetchTopArtists();
 });
@@ -82,9 +84,6 @@ async function fetchTopArtists() {
         });
 
         const uniqueArtistsArray = Array.from(artistsMap.values()).slice(0, 12);
-
-        resultsContainer.classList.remove('artists-container');
-        resultsContainer.classList.add('main-container');
 
         displayResults(uniqueArtistsArray, 0);
 
@@ -248,7 +247,7 @@ function backToArtistList() {
     searchArtists(currentArtistQuery, offset);
 }
 
-const resultsContainer = $('.artists-container');
+const resultsContainer = $('.main-container');
 const searchBar = $('.search-bar')
 
 resultsContainer.on('scroll', handleScroll);
@@ -274,9 +273,9 @@ function debouncedSearch() {
     clearTimeout(this.searchTimeout);
 
     this.searchTimeout = setTimeout(() => {
-        resultsContainer.classList.add('artists-container');
         resultsContainer.classList.remove('main-container');
-        
+        resultsContainer.classList.add('artists-container');
+
         if (artist) {
             offset = 0;
             isArtistView = false;
@@ -284,6 +283,8 @@ function debouncedSearch() {
             resultsContainer.on('scroll', handleScroll);
             searchArtists(artist, offset);
         } else {
+            resultsContainer.classList.remove('artists-container');
+            resultsContainer.classList.add('main-container');
             fetchTopArtists();
         }
     }, 500);
