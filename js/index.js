@@ -49,11 +49,20 @@ window.on('DOMContentLoaded', () => {
     fetchTopArtists();
 });
 
+let isSpotifyFetching = false;
+
 $('.spotify-icon').on('click', () => {
-    resultsContainer.classList.add('main-container');
-    resultsContainer.classList.remove('artists-container');
-    searchBar.value = '';
-    fetchTopArtists();
+    if (!isSpotifyFetching) {
+        isSpotifyFetching = true;
+        resultsContainer.classList.add('main-container');
+        resultsContainer.classList.remove('artists-container');
+        searchBar.value = '';
+        fetchTopArtists();
+        
+        setTimeout(() => {
+            isSpotifyFetching = false;
+        }, 1500);
+    }
 });
 
 async function fetchTopArtists() {
