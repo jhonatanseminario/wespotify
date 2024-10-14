@@ -76,7 +76,7 @@ async function fetchTopArtists() {
                 artistsMap.set(artist.id, {
                     id: artist.id,
                     name: artist.name,
-                    imageUrl: item.track.album.images[1] ? item.track.album.images[1].url : '/fallback-icon.svg'
+                    imageUrl: item.track.album.images[1] ? item.track.album.images[1].url : '/assets/icons/artist-fallback-icon.svg'
                 });
             }
         });
@@ -110,7 +110,7 @@ async function searchArtists(artist, offset) {
         const artistsArray = data.artists.items.map(item => ({
             id: item.id,
             name: item.name,
-            imageUrl: item.images[1] ? item.images[1].url : '/fallback-icon.svg'
+            imageUrl: item.images[1] ? item.images[1].url : '/assets/icons/artist-fallback-icon.svg'
         }));
         displayResults(artistsArray, offset);
     } catch(error) {

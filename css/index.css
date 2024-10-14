@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'Spotify Mix';
-    src: url('/spotify-mix.woff2') format('woff2');
+    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Spotify Mix Title';
-    src: url('/spotify-mix-title.woff2') format('woff2');
+    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
 }
 
 * {
