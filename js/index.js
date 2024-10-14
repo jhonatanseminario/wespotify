@@ -1,16 +1,26 @@
-function $(selector) {
-    return document.querySelector(selector);
-}
+// ===============================================================================//
+//                HELPERS PARA SELECTORES Y MANEJADORES DE EVENTOS                //
+//================================================================================//
 
-function $$(selector) {
-    return document.querySelectorAll(selector);
-}
+const $ = selector => document.querySelector(selector);
+const $$ = selector => document.querySelectorAll(selector);
 
 function on(event, handler) {
     this.addEventListener(event, handler);
 }
 
+function off(event, handler) {
+    this.removeEventListener(event, handler);
+}
+
 Node.prototype.on = on;
+Node.prototype.off = off;
+
+
+
+// ===============================================================================//
+//                  OBTENER TOKEN DE ACCESO A LA API DE SPOTIFY                   //
+//================================================================================//
 
 async function getToken() {
     const clientId = '0d2db64a6bff43769f27c1ee87901f09';
@@ -42,6 +52,12 @@ async function getToken() {
     }
 }
 
+
+
+// ===============================================================================//
+//                                                                                //
+//================================================================================//
+
 window.on('DOMContentLoaded', () => {
     document.on('dragstart', (event) => event.preventDefault());
     document.on('contextmenu', (event) => event.preventDefault());
@@ -54,7 +70,7 @@ let isSpotifyFetching = false;
 $('.spotify-icon').on('click', () => {
     if (!isSpotifyFetching) {
         isSpotifyFetching = true;
-        resultsContainer.removeEventListener('scroll', handleScroll);
+        resultsContainer.off('scroll', handleScroll);
         searchBar.value = '';
 
         setTimeout(() => {
@@ -66,7 +82,7 @@ $('.spotify-icon').on('click', () => {
         fetchTopArtists();
         
         setTimeout(() => {
-            resultsContainer.addEventListener('scroll', handleScroll);
+            resultsContainer.on('scroll', handleScroll);
             isSpotifyFetching = false;
         }, 1500);
     }
@@ -167,7 +183,7 @@ function displayResults(artistsArray, offset) {
         artistElement.on('click', () => {
             if (!isArtistFetched) {
                 isArtistFetched = true;
-                resultsContainer.removeEventListener('scroll', handleScroll);
+                resultsContainer.off('scroll', handleScroll);
                 fetchArtistDetails(artist.id);
         
                 setTimeout(() => {
@@ -307,7 +323,7 @@ function debouncedSearch() {
             resultsContainer.on('scroll', handleScroll);
             searchArtists(artist, offset);
         } else {
-            resultsContainer.removeEventListener('scroll', handleScroll);
+            resultsContainer.off('scroll', handleScroll);
             resultsContainer.classList.remove('artists-container');
             resultsContainer.classList.add('main-container');
             fetchTopArtists();
