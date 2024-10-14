@@ -54,12 +54,19 @@ let isSpotifyFetching = false;
 $('.spotify-icon').on('click', () => {
     if (!isSpotifyFetching) {
         isSpotifyFetching = true;
-        resultsContainer.classList.add('main-container');
-        resultsContainer.classList.remove('artists-container');
+        resultsContainer.removeEventListener('scroll', handleScroll);
         searchBar.value = '';
+
+        setTimeout(() => {
+            resultsContainer.classList.add('main-container');
+            resultsContainer.classList.remove('artists-container');
+            resultsContainer.innerHTML = ''
+        }, 500);
+
         fetchTopArtists();
         
         setTimeout(() => {
+            resultsContainer.addEventListener('scroll', handleScroll);
             isSpotifyFetching = false;
         }, 1500);
     }
@@ -256,24 +263,31 @@ function backToArtistList() {
     searchArtists(currentArtistQuery, offset);
 }
 
-const resultsContainer = $('.main-container');
+const resultsContainer = $('.container');
 const searchBar = $('.search-bar')
 
 resultsContainer.on('scroll', handleScroll);
 searchBar.on('input', debouncedSearch);
 
+let offset = 0;
 let isLoading = false;
 let isArtistView = false;
+let debounceTimeout;
 
 function handleScroll() {
     if (isArtistView) return;
+    const isMainContainer = resultsContainer.classList.contains('main-container');
 
-    if (!isLoading && resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 32) {
-        isLoading = true;
-        offset += 30;
-        searchArtists(currentArtistQuery, offset).finally(() => {
-            isLoading = false;
-        });
+    if (!isMainContainer && !isLoading && resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 32) {
+        clearTimeout(debounceTimeout);
+
+        debounceTimeout = setTimeout(() => {
+            isLoading = true;
+            offset += 30;
+            searchArtists(currentArtistQuery, offset).finally(() => {
+                isLoading = false;
+            });
+        }, 1000);
     }
 }
 
@@ -283,6 +297,7 @@ function debouncedSearch() {
 
     this.searchTimeout = setTimeout(() => {
         resultsContainer.classList.remove('main-container');
+        resultsContainer.innerHTML = '';
         resultsContainer.classList.add('artists-container');
 
         if (artist) {
@@ -292,6 +307,7 @@ function debouncedSearch() {
             resultsContainer.on('scroll', handleScroll);
             searchArtists(artist, offset);
         } else {
+            resultsContainer.removeEventListener('scroll', handleScroll);
             resultsContainer.classList.remove('artists-container');
             resultsContainer.classList.add('main-container');
             fetchTopArtists();
