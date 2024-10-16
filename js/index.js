@@ -88,6 +88,17 @@ $('.spotify-icon').on('click', () => {
     }
 });
 
+const clearIcon = $('.clear-icon');
+
+clearIcon.on('click', () => {
+    searchBar.value = ''
+    resultsContainer.innerHTML = ''
+    resultsContainer.classList.remove('artists-container');
+    resultsContainer.classList.add('main-container');
+    clearIcon.style.display = 'none'
+    fetchTopArtists()
+});
+
 async function fetchTopArtists() {
     const token = await getToken();
     const top50GlobalPlaylistId = '37i9dQZEVXbMDoHDwVN2tF';
@@ -115,7 +126,7 @@ async function fetchTopArtists() {
             }
         });
 
-        const uniqueArtistsArray = Array.from(artistsMap.values()).slice(0, 12);
+        const uniqueArtistsArray = Array.from(artistsMap.values()).slice(0, 40);
 
         displayResults(uniqueArtistsArray, 0);
 
@@ -129,7 +140,7 @@ async function searchArtists(artist, offset) {
     currentArtistQuery = artist;
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30&offset=${offset}`, {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=40&offset=${offset}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -184,6 +195,7 @@ function displayResults(artistsArray, offset) {
             if (!isArtistFetched) {
                 isArtistFetched = true;
                 resultsContainer.off('scroll', handleScroll);
+                resultsContainer.innerHTML = ''
                 fetchArtistDetails(artist.id);
         
                 setTimeout(() => {
@@ -299,11 +311,11 @@ function handleScroll() {
 
         debounceTimeout = setTimeout(() => {
             isLoading = true;
-            offset += 30;
+            offset += 40;
             searchArtists(currentArtistQuery, offset).finally(() => {
                 isLoading = false;
             });
-        }, 1000);
+        }, 1200);
     }
 }
 
@@ -321,11 +333,13 @@ function debouncedSearch() {
             isArtistView = false;
             resultsContainer.innerHTML = '';
             resultsContainer.on('scroll', handleScroll);
+            clearIcon.style.display = 'inline'
             searchArtists(artist, offset);
         } else {
             resultsContainer.off('scroll', handleScroll);
             resultsContainer.classList.remove('artists-container');
             resultsContainer.classList.add('main-container');
+            clearIcon.style.display = 'none'
             fetchTopArtists();
         }
     }, 500);
