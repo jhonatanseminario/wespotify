@@ -19,6 +19,19 @@ Node.prototype.off = off;
 
 
 // ===============================================================================//
+//                    EVENTOS CONTROLADOS AL CARGAR LA PÁGINA                     //
+//================================================================================//
+
+window.on('DOMContentLoaded', () => {
+    document.on('dragstart', (event) => event.preventDefault());
+    document.on('contextmenu', (event) => event.preventDefault());
+
+    fetchTopArtists();
+});
+
+
+
+// ===============================================================================//
 //                  OBTENER TOKEN DE ACCESO A LA API DE SPOTIFY                   //
 //================================================================================//
 
@@ -47,6 +60,7 @@ async function getToken() {
         const data = await response.json();
         const token = data.access_token;
         return token;
+
     } catch (error) {
         console.error('Error fetching token:', error);
     }
@@ -55,15 +69,48 @@ async function getToken() {
 
 
 // ===============================================================================//
-//                                                                                //
+//                          OBTENER ARTISTAS DESTACADOS                           //
 //================================================================================//
 
-window.on('DOMContentLoaded', () => {
-    document.on('dragstart', (event) => event.preventDefault());
-    document.on('contextmenu', (event) => event.preventDefault());
+async function fetchTopArtists() {
+    const token = await getToken();
+    const top50GlobalPlaylistId = '37i9dQZEVXbMDoHDwVN2tF';
 
-    fetchTopArtists();
-});
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${top50GlobalPlaylistId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data)
+        const topArtistsArray = [];
+
+        data.tracks.items.forEach(({ track }) => {
+            const { id, name } = track.artists[0];
+            const imageUrl = track.album.images[1]?.url || '/assets/icons/artist-fallback-icon.svg';
+        
+            if (!topArtistsArray.some(artist => artist.id === id)) {
+                topArtistsArray.push({ id, name, imageUrl });
+            }   
+        });
+
+        topArtistsArray.splice(40);
+        displayResults(topArtistsArray, 0);
+
+    } catch (error) {
+        console.error('Error fetching top artists:', error);
+    }
+}
+
+
+
+// ===============================================================================//
+//                  OBTENER TOKEN DE ACCESO A LA API DE SPOTIFY                   //
+//================================================================================//
 
 let isSpotifyFetching = false;
 
@@ -98,42 +145,6 @@ clearIcon.on('click', () => {
     clearIcon.style.display = 'none'
     fetchTopArtists()
 });
-
-async function fetchTopArtists() {
-    const token = await getToken();
-    const top50GlobalPlaylistId = '37i9dQZEVXbMDoHDwVN2tF';
-
-    try {
-        const response = await fetch(`https://api.spotify.com/v1/playlists/${top50GlobalPlaylistId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        const artistsMap = new Map();
-        data.tracks.items.forEach(item => {
-            const artist = item.track.artists[0];
-            if (!artistsMap.has(artist.id)) {
-                artistsMap.set(artist.id, {
-                    id: artist.id,
-                    name: artist.name,
-                    imageUrl: item.track.album.images[1] ? item.track.album.images[1].url : '/assets/icons/artist-fallback-icon.svg'
-                });
-            }
-        });
-
-        const uniqueArtistsArray = Array.from(artistsMap.values()).slice(0, 40);
-
-        displayResults(uniqueArtistsArray, 0);
-
-    } catch (error) {
-        console.error('Error fetching top artists:', error);
-    }
-}
 
 async function searchArtists(artist, offset) {
     const token = await getToken();
@@ -197,6 +208,7 @@ function displayResults(artistsArray, offset) {
                 resultsContainer.off('scroll', handleScroll);
                 resultsContainer.innerHTML = ''
                 searchBar.value = ''
+                clearIcon.style.display = 'none'
                 fetchArtistDetails(artist.id);
         
                 setTimeout(() => {
