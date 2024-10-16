@@ -43,7 +43,7 @@ body {
 }
 
 .main-container {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .artist-container {
@@ -84,6 +84,13 @@ body {
     font-weight: 600;
     overflow: hidden;
     animation: textAnimation .8s ease-in-out forwards;
+}
+
+.followers-info {
+    position: absolute;
+    top: 250px;
+    width: 100%;
+    z-index: 10;
 }
 
 @keyframes textAnimation {
@@ -223,12 +230,13 @@ body {
 
 .tracks-container {
     position: absolute;
-    top: 600px;
-    left: 128px;
-    text-align: left;
+    top: 360px;
+    width: 100%;
+    padding-bottom: 64px;
+    text-align: center;
     z-index: 30;
 }
 
 .track-item {
-    padding: 8px;
+    padding: 16px;
 }

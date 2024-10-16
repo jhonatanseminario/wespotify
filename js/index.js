@@ -196,6 +196,7 @@ function displayResults(artistsArray, offset) {
                 isArtistFetched = true;
                 resultsContainer.off('scroll', handleScroll);
                 resultsContainer.innerHTML = ''
+                searchBar.value = ''
                 fetchArtistDetails(artist.id);
         
                 setTimeout(() => {
@@ -256,9 +257,14 @@ async function fetchArtistDetails(artistID) {
         artistInfo.textContent = `${artistDetails.name}`;
         artistInfo.className = 'artist-info';
 
+        const followersInfo = document.createElement('div');
+        followersInfo.textContent = `${artistDetails.followers.total} Seguidores`;
+        followersInfo.className = 'followers-info';
+
         artistCover.appendChild(artistImage);
         resultsContainer.appendChild(artistCover);
         resultsContainer.appendChild(artistInfo);
+        resultsContainer.appendChild(followersInfo);
 
         const topTracks = await fetchArtistTopTracks(artistID);
 
@@ -315,7 +321,7 @@ function handleScroll() {
             searchArtists(currentArtistQuery, offset).finally(() => {
                 isLoading = false;
             });
-        }, 1200);
+        },800);
     }
 }
 
