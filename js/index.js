@@ -19,6 +19,15 @@ Node.prototype.off = off;
 
 
 // ===============================================================================//
+//                           DEFINIR VARIABLES GLOBALES                           //
+//================================================================================//
+
+const spotifyIcon = $('.spotify-icon');
+const container = $('.container');
+
+
+
+// ===============================================================================//
 //                    EVENTOS CONTROLADOS AL CARGAR LA PÁGINA                     //
 //================================================================================//
 
@@ -26,6 +35,7 @@ window.on('DOMContentLoaded', () => {
     document.on('dragstart', (event) => event.preventDefault());
     document.on('contextmenu', (event) => event.preventDefault());
 
+    spotifyIcon.on('click', fetchTopArtists);
     fetchTopArtists();
 });
 
@@ -86,7 +96,6 @@ async function fetchTopArtists() {
         }
 
         const data = await response.json();
-        console.log(data)
         const topArtistsArray = [];
 
         data.tracks.items.forEach(({ track }) => {
@@ -95,11 +104,11 @@ async function fetchTopArtists() {
         
             if (!topArtistsArray.some(artist => artist.id === id)) {
                 topArtistsArray.push({ id, name, imageUrl });
-            }   
+            }
         });
 
         topArtistsArray.splice(40);
-        displayResults(topArtistsArray, 0);
+        displayResults(topArtistsArray, 0);    // TODO: MODIFICAR ESTA FUNCIÓN
 
     } catch (error) {
         console.error('Error fetching top artists:', error);
@@ -109,39 +118,116 @@ async function fetchTopArtists() {
 
 
 // ===============================================================================//
-//                  OBTENER TOKEN DE ACCESO A LA API DE SPOTIFY                   //
+//                           MOSTRAR PERFIL DEL ARTISTA                           //
 //================================================================================//
 
-let isSpotifyFetching = false;
+async function fetchArtistDetails(artistID) {    // TODO: NOMBRE DE PARÁMETRO PROVISIONAL
+    const token = await getToken();
+    
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/artists/${artistID}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-$('.spotify-icon').on('click', () => {
-    if (!isSpotifyFetching) {
-        isSpotifyFetching = true;
-        resultsContainer.off('scroll', handleScroll);
-        searchBar.value = '';
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-        setTimeout(() => {
-            resultsContainer.classList.add('main-container');
-            resultsContainer.classList.remove('artists-container');
-            resultsContainer.innerHTML = ''
-        }, 500);
-
-        fetchTopArtists();
+        const data = await response.json();
+        console.log(data);    // TODO: ELIMINAR ESTA LÍNEA
         
-        setTimeout(() => {
-            resultsContainer.on('scroll', handleScroll);
-            isSpotifyFetching = false;
-        }, 1500);
+
+        // CREAR ELEMENTOS
+        const artistImageContainer = document.createElement('div');
+        const artistImage = document.createElement('img');
+        const artistName = document.createElement('div');
+        const artistFollowers = document.createElement('div');
+
+
+        // MODIFICAR ELEMENTOS
+        artistImageContainer.className = 'artist-image-container';
+
+        artistImage.className = 'artist-images';    // TODO: NOMBRE DE CLASE PROVISIONAL
+        artistImage.src = data.images[1].url;
+        artistImage.alt = `${data.name} - Imagen`;
+
+        artistName.className = 'artist-names';    // TODO: NOMBRE DE CLASE PROVISIONAL
+        artistName.textContent = `${data.name}`;
+
+        artistFollowers.className = 'artist-followers';
+        artistFollowers.textContent = `${data.followers.total} Seguidores`;
+
+        container.innerHTML = '';
+
+
+        // AGREGAR ELEMENTOS
+        artistImageContainer.appendChild(artistImage);
+        container.appendChild(artistImageContainer);
+        container.appendChild(artistName);
+        container.appendChild(artistFollowers);
+
+        
+        const topTracks = await fetchArtistTopTracks(artistID);
+
+        let tracksContainer = container.querySelector('.tracks-container');
+        if (tracksContainer) {
+            tracksContainer.remove();
+        }
+
+        tracksContainer = document.createElement('div');
+        tracksContainer.className = 'tracks-container';
+
+
+        topTracks.forEach(track => {
+            const trackElement = document.createElement('div');
+            trackElement.className = 'track-item';
+            trackElement.textContent = track.name;
+            tracksContainer.appendChild(trackElement);
+        });
+
+        container.appendChild(tracksContainer);
+
+    } catch (error) {
+        console.error('Error fetching artist details:', error);
     }
-});
+}
+
+
+
+// ===============================================================================//
+//                  NOMBRE PROVISIONAL                   //
+//================================================================================//
+
+// let isSpotifyFetching = false;
+
+// $('.spotify-icon').on('click', () => {
+//     if (!isSpotifyFetching) {
+//         isSpotifyFetching = true;
+//         container.off('scroll', handleScroll);
+//         searchBar.value = '';
+
+//         setTimeout(() => {
+//             container.classList.add('main-container');
+//             container.classList.remove('artists-container');
+//             container.innerHTML = ''
+//         }, 500);
+
+//         fetchTopArtists();
+        
+//         setTimeout(() => {
+//             container.on('scroll', handleScroll);
+//             isSpotifyFetching = false;
+//         }, 1500);
+//     }
+// });
 
 const clearIcon = $('.clear-icon');
 
 clearIcon.on('click', () => {
     searchBar.value = ''
-    resultsContainer.innerHTML = ''
-    resultsContainer.classList.remove('artists-container');
-    resultsContainer.classList.add('main-container');
+    container.innerHTML = ''
+    container.classList.remove('artists-container');
+    container.classList.add('main-container');
     clearIcon.style.display = 'none'
     fetchTopArtists()
 });
@@ -174,13 +260,13 @@ async function searchArtists(artist, offset) {
 let isArtistFetched = false;
 
 function displayResults(artistsArray, offset) {
-    if (!resultsContainer) {
+    if (!container) {
         console.error('Results container not found!');
         return;
     }
 
     if (offset === 0) {
-        resultsContainer.innerHTML = '';
+        container.innerHTML = '';
     }
 
     artistsArray.forEach(artist => {
@@ -205,8 +291,8 @@ function displayResults(artistsArray, offset) {
         artistElement.on('click', () => {
             if (!isArtistFetched) {
                 isArtistFetched = true;
-                resultsContainer.off('scroll', handleScroll);
-                resultsContainer.innerHTML = ''
+                container.off('scroll', handleScroll);
+                container.innerHTML = ''
                 searchBar.value = ''
                 clearIcon.style.display = 'none'
                 fetchArtistDetails(artist.id);
@@ -217,7 +303,7 @@ function displayResults(artistsArray, offset) {
             }
         });
 
-        resultsContainer.appendChild(artistElement);
+        container.appendChild(artistElement);
     });
 }
 
@@ -241,78 +327,17 @@ async function fetchArtistTopTracks(artistID) {
     }
 }
 
-async function fetchArtistDetails(artistID) {
-    const token = await getToken();
-    
-    try {
-        const response = await fetch(`https://api.spotify.com/v1/artists/${artistID}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error en la API: ${response.status}`);
-        }
-
-        const artistDetails = await response.json();
-        isArtistView = true;
-        resultsContainer.innerHTML = '';
-
-        const artistCover = document.createElement('div');
-        artistCover.className = 'cover-image';
-
-        const artistImage = document.createElement('img');
-        artistImage.src = artistDetails.images[1].url;
-        artistImage.alt = `${artistDetails.name} - Imagen`;
-        artistImage.className = 'profile-image';
-
-        const artistInfo = document.createElement('div');
-        artistInfo.textContent = `${artistDetails.name}`;
-        artistInfo.className = 'artist-info';
-
-        const followersInfo = document.createElement('div');
-        followersInfo.textContent = `${artistDetails.followers.total} Seguidores`;
-        followersInfo.className = 'followers-info';
-
-        artistCover.appendChild(artistImage);
-        resultsContainer.appendChild(artistCover);
-        resultsContainer.appendChild(artistInfo);
-        resultsContainer.appendChild(followersInfo);
-
-        const topTracks = await fetchArtistTopTracks(artistID);
-
-        let tracksContainer = resultsContainer.querySelector('.tracks-container');
-        if (tracksContainer) {
-            tracksContainer.remove();
-        }
-
-        tracksContainer = document.createElement('div');
-        tracksContainer.className = 'tracks-container';
-
-        topTracks.forEach(track => {
-            const trackElement = document.createElement('div');
-            trackElement.className = 'track-item';
-            trackElement.textContent = track.name;
-            tracksContainer.appendChild(trackElement);
-        });
-
-        resultsContainer.appendChild(tracksContainer);
-
-    } catch (error) {
-        console.error('Error fetching artist details:', error);
-    }
-}
-
 function backToArtistList() {
-    resultsContainer.innerHTML = '';
+    container.innerHTML = '';
     isArtistView = false;
     offset = 0;
     searchArtists(currentArtistQuery, offset);
 }
 
-const resultsContainer = $('.container');
+
 const searchBar = $('.search-bar')
 
-resultsContainer.on('scroll', handleScroll);
+container.on('scroll', handleScroll);
 searchBar.on('input', debouncedSearch);
 
 let offset = 0;
@@ -322,9 +347,9 @@ let debounceTimeout;
 
 function handleScroll() {
     if (isArtistView) return;
-    const isMainContainer = resultsContainer.classList.contains('main-container');
+    const isMainContainer = container.classList.contains('main-container');
 
-    if (!isMainContainer && !isLoading && resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 32) {
+    if (!isMainContainer && !isLoading && container.scrollTop + container.clientHeight >= container.scrollHeight - 32) {
         clearTimeout(debounceTimeout);
 
         debounceTimeout = setTimeout(() => {
@@ -342,21 +367,21 @@ function debouncedSearch() {
     clearTimeout(this.searchTimeout);
 
     this.searchTimeout = setTimeout(() => {
-        resultsContainer.classList.remove('main-container');
-        resultsContainer.innerHTML = '';
-        resultsContainer.classList.add('artists-container');
+        container.classList.remove('main-container');
+        container.innerHTML = '';
+        container.classList.add('artists-container');
 
         if (artist) {
             offset = 0;
             isArtistView = false;
-            resultsContainer.innerHTML = '';
-            resultsContainer.on('scroll', handleScroll);
+            container.innerHTML = '';
+            container.on('scroll', handleScroll);
             clearIcon.style.display = 'inline'
             searchArtists(artist, offset);
         } else {
-            resultsContainer.off('scroll', handleScroll);
-            resultsContainer.classList.remove('artists-container');
-            resultsContainer.classList.add('main-container');
+            container.off('scroll', handleScroll);
+            container.classList.remove('artists-container');
+            container.classList.add('main-container');
             clearIcon.style.display = 'none'
             fetchTopArtists();
         }
