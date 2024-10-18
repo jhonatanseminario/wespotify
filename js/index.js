@@ -1,5 +1,5 @@
 // ===============================================================================//
-//                HELPERS PARA SELECTORES Y MANEJADORES DE EVENTOS                //
+//               HELPERS PARA SELECTORES Y ESCUCHADORES DE EVENTOS                //
 //================================================================================//
 
 const $ = selector => document.querySelector(selector);
@@ -19,7 +19,7 @@ Node.prototype.off = off;
 
 
 // ===============================================================================//
-//                           DEFINIR VARIABLES GLOBALES                           //
+//                         INICIALIZAR CONSTANTES GLOBALES                        //
 //================================================================================//
 
 const spotifyIcon = $('.spotify-icon');
@@ -29,7 +29,7 @@ const container = $('.container');
 
 
 // ===============================================================================//
-//                    EVENTOS CONTROLADOS AL CARGAR LA PÁGINA                     //
+//                     AGREGAR ESCUCHADORES AL CARGAR EL DOM                      //
 //================================================================================//
 
 window.on('DOMContentLoaded', () => {
@@ -89,7 +89,7 @@ async function getToken() {
 
 
 // ===============================================================================//
-//                          OBTENER ARTISTAS DESTACADOS                           //
+//                          MOSTRAR ARTISTAS DESTACADOS                           //
 //================================================================================//
 
 async function fetchTopArtists() {
@@ -118,7 +118,7 @@ async function fetchTopArtists() {
             }
         });
 
-        topArtistsArray.splice(40);
+        topArtistsArray.splice(20);
 
         topArtistsArray.forEach(artist => {
 
@@ -129,16 +129,16 @@ async function fetchTopArtists() {
 
 
             // MODIFICAR ELEMENTOS
-            topArtistContainer.className = 'top-artist-container';
+            topArtistContainer.className = 'artist-container';
 
-            topArtistImage.className = 'top-artist-image';
+            topArtistImage.className = 'artist-image';
             topArtistImage.src = artist.imageUrl;
             topArtistImage.alt = artist.name;
             topArtistImage.onload = () => {
                 topArtistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
             };
     
-            topArtistName.className = 'top-artist-name';
+            topArtistName.className = 'artist-name';
             topArtistName.textContent = artist.name;
 
 
@@ -188,16 +188,16 @@ async function fetchArtistDetails(artistID) {
 
 
         // MODIFICAR ELEMENTOS
-        artistImageContainer.className = 'artist-image-container';
+        artistImageContainer.className = 'profile-artist-image-container';
 
-        artistImage.className = 'artist-image';
+        artistImage.className = 'profile-artist-image';
         artistImage.src = data.images[1].url;
         artistImage.alt = `${data.name} - Imagen`;
 
-        artistName.className = 'artist-name';
+        artistName.className = 'profile-artist-name';
         artistName.textContent = `${data.name}`;
 
-        artistFollowers.className = 'artist-followers';
+        artistFollowers.className = 'profile-artist-followers';
         artistFollowers.textContent = `${data.followers.total} Seguidores`;
 
         container.innerHTML = '';
@@ -235,7 +235,7 @@ async function fetchArtistDetails(artistID) {
 
 
 // ===============================================================================//
-//                   BUSCAR PISTAS MÁS POPULARES DE UN ARTISTA                    //
+//                      OBTENER PISTAS POPULARES DEL ARTISTA                      //
 //================================================================================//
 
 async function fetchArtistTopTracks(artistID) {
@@ -261,15 +261,14 @@ async function fetchArtistTopTracks(artistID) {
 
 
 // ===============================================================================//
-//                  NOMBRE PROVISIONAL                   //
+//                   MOSTRAR RESULTADOS DE BÚSQUEDA DE ARTISTAS                   //
 //================================================================================//
 
-async function searchArtists(artist, offset) {
+async function fetchArtists(artist) {
     const token = await getToken();
-    currentArtistQuery = artist;
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=40&offset=${offset}`, {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -278,35 +277,65 @@ async function searchArtists(artist, offset) {
         }
 
         const data = await response.json();
-        const artistsArray = data.artists.items.map(item => ({
-            id: item.id,
-            name: item.name,
-            imageUrl: item.images[1] ? item.images[1].url : '/assets/icons/artist-fallback-icon.svg'
-        }));
-        displayResults(artistsArray, offset);
-    } catch(error) {
+
+        const artistsArray = [];
+        
+        data.artists.items.forEach((artist) => {
+            const { id, name } = artist;
+            const imageUrl = artist.images[1]?.url || '/assets/icons/artist-fallback-icon.svg';
+            artistsArray.push({ id, name, imageUrl });
+        });
+
+        artistsArray.forEach(artist => {
+
+            // CREAR ELEMENTOS
+            const artistContainer = document.createElement('div');
+            const artistImage = document.createElement('img');
+            const artistName = document.createElement('div');
+
+
+            // MODIFICAR ELEMENTOS
+            artistContainer.className = 'artist-container';
+
+            artistImage.className = 'artist-image';
+            artistImage.src = artist.imageUrl;
+            artistImage.alt = artist.name;
+            artistImage.onload = () => {
+                artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
+            };
+    
+            artistName.className = 'artist-name';
+            artistName.textContent = artist.name;
+
+
+            // AGREGAR ELEMENTOS
+            artistContainer.appendChild(artistImage);
+            artistContainer.appendChild(artistName);
+            container.appendChild(artistContainer);
+            
+
+            // AGREGAR EVENTOS A LOS ELEMENTOS
+            artistContainer.on('click', () => {
+                fetchArtistDetails(artist.id); 
+            });
+        });
+        
+    } catch (error) {
         console.error('Error fetching artists:', error);
     }
 }
 
-let isArtistFetched = false;
 
-function backToArtistList() {
-    container.innerHTML = '';
-    isArtistView = false;
-    offset = 0;
-    searchArtists(currentArtistQuery, offset);
-}
 
+// ===============================================================================//
+//                             NOMBRE PROVISIONAL                                 //
+//================================================================================//
+
+let debounceTimeout;
 const searchBar = $('.search-bar')
 
 container.on('scroll', handleScroll);
 searchBar.on('input', debouncedSearch);
-
-let offset = 0;
-let isLoading = false;
-let isArtistView = false;
-let debounceTimeout;
 
 function handleScroll() {
     if (isArtistView) return;
@@ -318,7 +347,7 @@ function handleScroll() {
         debounceTimeout = setTimeout(() => {
             isLoading = true;
             offset += 40;
-            searchArtists(currentArtistQuery, offset).finally(() => {
+            fetchArtists(currentArtistQuery, offset).finally(() => {
                 isLoading = false;
             });
         },800);
@@ -340,7 +369,7 @@ function debouncedSearch() {
             container.innerHTML = '';
             container.on('scroll', handleScroll);
             clearIcon.style.display = 'inline'
-            searchArtists(artist, offset);
+            fetchArtists(artist, offset);
         } else {
             container.off('scroll', handleScroll);
             container.classList.remove('artists-container');
@@ -350,59 +379,3 @@ function debouncedSearch() {
         }
     }, 500);
 }
-
-// let isSpotifyFetching = false;
-
-// $('.spotify-icon').on('click', () => {
-//     if (!isSpotifyFetching) {
-//         isSpotifyFetching = true;
-//         container.off('scroll', handleScroll);
-//         searchBar.value = '';
-
-//         setTimeout(() => {
-//             container.classList.add('main-container');
-//             container.classList.remove('artists-container');
-//             container.innerHTML = ''
-//         }, 500);
-
-//         fetchTopArtists();
-        
-//         setTimeout(() => {
-//             container.on('scroll', handleScroll);
-//             isSpotifyFetching = false;
-//         }, 1500);
-//     }
-// });
-
-// function displayResults(artistsArray) {
-//     artistsArray.forEach(artist => {
-//         const artistElement = document.createElement('div');
-//         artistElement.className = 'artist-container';
-
-//         const artistImage = document.createElement('img');
-//         artistImage.src = artist.imageUrl;
-//         artistImage.alt = artist.name;
-//         artistImage.className = 'artist-image';
-//         artistImage.onload = () => {
-//             artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
-//         };
-
-//         const artistName = document.createElement('div');
-//         artistName.textContent = artist.name;
-//         artistName.className = 'artist-name';
-
-//         artistElement.appendChild(artistImage);
-//         artistElement.appendChild(artistName);
-
-//         artistElement.on('click', () => {
-//                 container.off('scroll', handleScroll);
-//                 container.innerHTML = ''
-//                 searchBar.value = ''
-//                 clearIcon.style.display = 'none'
-//                 fetchArtistDetails(artist.id);
-            
-//         });
-
-//         container.appendChild(artistElement);
-//     });
-// }
