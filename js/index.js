@@ -23,6 +23,7 @@ Node.prototype.off = off;
 //================================================================================//
 
 const spotifyIcon = $('.spotify-icon');
+const clearIcon = $('.clear-icon');
 const container = $('.container');
 
 
@@ -35,7 +36,16 @@ window.on('DOMContentLoaded', () => {
     document.on('dragstart', (event) => event.preventDefault());
     document.on('contextmenu', (event) => event.preventDefault());
 
-    spotifyIcon.on('click', fetchTopArtists);
+    spotifyIcon.on('click', () => {
+        container.innerHTML = ''
+        searchBar.value = ''
+        fetchTopArtists()
+    });
+
+    clearIcon.on('click', () => {
+        searchBar.value = ''
+    });
+
     fetchTopArtists();
 });
 
@@ -96,6 +106,7 @@ async function fetchTopArtists() {
         }
 
         const data = await response.json();
+
         const topArtistsArray = [];
 
         data.tracks.items.forEach(({ track }) => {
@@ -108,7 +119,40 @@ async function fetchTopArtists() {
         });
 
         topArtistsArray.splice(40);
-        displayResults(topArtistsArray, 0);    // TODO: MODIFICAR ESTA FUNCIÓN
+
+        topArtistsArray.forEach(artist => {
+
+            // CREAR ELEMENTOS
+            const topArtistContainer = document.createElement('div');
+            const topArtistImage = document.createElement('img');
+            const topArtistName = document.createElement('div');
+
+
+            // MODIFICAR ELEMENTOS
+            topArtistContainer.className = 'top-artist-container';
+
+            topArtistImage.className = 'top-artist-image';
+            topArtistImage.src = artist.imageUrl;
+            topArtistImage.alt = artist.name;
+            topArtistImage.onload = () => {
+                topArtistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
+            };
+    
+            topArtistName.className = 'top-artist-name';
+            topArtistName.textContent = artist.name;
+
+
+            // AGREGAR ELEMENTOS
+            topArtistContainer.appendChild(topArtistImage);
+            topArtistContainer.appendChild(topArtistName);
+            container.appendChild(topArtistContainer);
+            
+
+            // AGREGAR EVENTOS A LOS ELEMENTOS
+            topArtistContainer.on('click', () => {
+                fetchArtistDetails(artist.id); 
+            });
+        });
 
     } catch (error) {
         console.error('Error fetching top artists:', error);
@@ -121,7 +165,7 @@ async function fetchTopArtists() {
 //                           MOSTRAR PERFIL DEL ARTISTA                           //
 //================================================================================//
 
-async function fetchArtistDetails(artistID) {    // TODO: NOMBRE DE PARÁMETRO PROVISIONAL
+async function fetchArtistDetails(artistID) {
     const token = await getToken();
     
     try {
@@ -134,7 +178,6 @@ async function fetchArtistDetails(artistID) {    // TODO: NOMBRE DE PARÁMETRO P
         }
 
         const data = await response.json();
-        console.log(data);    // TODO: ELIMINAR ESTA LÍNEA
         
 
         // CREAR ELEMENTOS
@@ -147,11 +190,11 @@ async function fetchArtistDetails(artistID) {    // TODO: NOMBRE DE PARÁMETRO P
         // MODIFICAR ELEMENTOS
         artistImageContainer.className = 'artist-image-container';
 
-        artistImage.className = 'artist-images';    // TODO: NOMBRE DE CLASE PROVISIONAL
+        artistImage.className = 'artist-image';
         artistImage.src = data.images[1].url;
         artistImage.alt = `${data.name} - Imagen`;
 
-        artistName.className = 'artist-names';    // TODO: NOMBRE DE CLASE PROVISIONAL
+        artistName.className = 'artist-name';
         artistName.textContent = `${data.name}`;
 
         artistFollowers.className = 'artist-followers';
@@ -167,25 +210,22 @@ async function fetchArtistDetails(artistID) {    // TODO: NOMBRE DE PARÁMETRO P
         container.appendChild(artistFollowers);
 
         
-        const topTracks = await fetchArtistTopTracks(artistID);
+        // LLAMAR FUNCIÓN PARA BUSCAR PISTAS MÁS POPULARES
+        const artistTopTracksArray = await fetchArtistTopTracks(artistID);
 
-        let tracksContainer = container.querySelector('.tracks-container');
-        if (tracksContainer) {
-            tracksContainer.remove();
-        }
+        artistTopTracksContainer = document.createElement('div');
+        artistTopTracksContainer.className = 'artist-top-tracks-container';
 
-        tracksContainer = document.createElement('div');
-        tracksContainer.className = 'tracks-container';
+        artistTopTracksArray.forEach(track => {
+            const topTrack = document.createElement('div');
 
+            topTrack.className = 'top-track';
+            topTrack.textContent = track.name;
 
-        topTracks.forEach(track => {
-            const trackElement = document.createElement('div');
-            trackElement.className = 'track-item';
-            trackElement.textContent = track.name;
-            tracksContainer.appendChild(trackElement);
+            artistTopTracksContainer.appendChild(topTrack);
         });
 
-        container.appendChild(tracksContainer);
+        container.appendChild(artistTopTracksContainer);
 
     } catch (error) {
         console.error('Error fetching artist details:', error);
@@ -195,42 +235,34 @@ async function fetchArtistDetails(artistID) {    // TODO: NOMBRE DE PARÁMETRO P
 
 
 // ===============================================================================//
-//                  NOMBRE PROVISIONAL                   //
+//                   BUSCAR PISTAS MÁS POPULARES DE UN ARTISTA                    //
 //================================================================================//
 
-// let isSpotifyFetching = false;
+async function fetchArtistTopTracks(artistID) {
+    const token = await getToken();
 
-// $('.spotify-icon').on('click', () => {
-//     if (!isSpotifyFetching) {
-//         isSpotifyFetching = true;
-//         container.off('scroll', handleScroll);
-//         searchBar.value = '';
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/artists/${artistID}/top-tracks`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-//         setTimeout(() => {
-//             container.classList.add('main-container');
-//             container.classList.remove('artists-container');
-//             container.innerHTML = ''
-//         }, 500);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-//         fetchTopArtists();
-        
-//         setTimeout(() => {
-//             container.on('scroll', handleScroll);
-//             isSpotifyFetching = false;
-//         }, 1500);
-//     }
-// });
+        const data = await response.json();
+        return data.tracks;
 
-const clearIcon = $('.clear-icon');
+    } catch (error) {
+        console.error('Error fetching artist top tracks:', error);
+    }
+}
 
-clearIcon.on('click', () => {
-    searchBar.value = ''
-    container.innerHTML = ''
-    container.classList.remove('artists-container');
-    container.classList.add('main-container');
-    clearIcon.style.display = 'none'
-    fetchTopArtists()
-});
+
+
+// ===============================================================================//
+//                  NOMBRE PROVISIONAL                   //
+//================================================================================//
 
 async function searchArtists(artist, offset) {
     const token = await getToken();
@@ -259,81 +291,12 @@ async function searchArtists(artist, offset) {
 
 let isArtistFetched = false;
 
-function displayResults(artistsArray, offset) {
-    if (!container) {
-        console.error('Results container not found!');
-        return;
-    }
-
-    if (offset === 0) {
-        container.innerHTML = '';
-    }
-
-    artistsArray.forEach(artist => {
-        const artistElement = document.createElement('div');
-        artistElement.className = 'artist-container';
-
-        const artistImage = document.createElement('img');
-        artistImage.src = artist.imageUrl;
-        artistImage.alt = artist.name;
-        artistImage.className = 'artist-image';
-        artistImage.onload = () => {
-            artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
-        };
-
-        const artistName = document.createElement('div');
-        artistName.textContent = artist.name;
-        artistName.className = 'artist-name';
-
-        artistElement.appendChild(artistImage);
-        artistElement.appendChild(artistName);
-
-        artistElement.on('click', () => {
-            if (!isArtistFetched) {
-                isArtistFetched = true;
-                container.off('scroll', handleScroll);
-                container.innerHTML = ''
-                searchBar.value = ''
-                clearIcon.style.display = 'none'
-                fetchArtistDetails(artist.id);
-        
-                setTimeout(() => {
-                    isArtistFetched = false;
-                }, 1000);
-            }
-        });
-
-        container.appendChild(artistElement);
-    });
-}
-
-async function fetchArtistTopTracks(artistID) {
-    const token = await getToken();
-    
-    try {
-        const response = await fetch(`https://api.spotify.com/v1/artists/${artistID}/top-tracks?market=US`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error en la API: ${response.status}`);
-        }
-
-        const topTracksData = await response.json();
-        return topTracksData.tracks;
-
-    } catch (error) {
-        console.error('Error fetching artist top tracks:', error);
-    }
-}
-
 function backToArtistList() {
     container.innerHTML = '';
     isArtistView = false;
     offset = 0;
     searchArtists(currentArtistQuery, offset);
 }
-
 
 const searchBar = $('.search-bar')
 
@@ -387,3 +350,59 @@ function debouncedSearch() {
         }
     }, 500);
 }
+
+// let isSpotifyFetching = false;
+
+// $('.spotify-icon').on('click', () => {
+//     if (!isSpotifyFetching) {
+//         isSpotifyFetching = true;
+//         container.off('scroll', handleScroll);
+//         searchBar.value = '';
+
+//         setTimeout(() => {
+//             container.classList.add('main-container');
+//             container.classList.remove('artists-container');
+//             container.innerHTML = ''
+//         }, 500);
+
+//         fetchTopArtists();
+        
+//         setTimeout(() => {
+//             container.on('scroll', handleScroll);
+//             isSpotifyFetching = false;
+//         }, 1500);
+//     }
+// });
+
+// function displayResults(artistsArray) {
+//     artistsArray.forEach(artist => {
+//         const artistElement = document.createElement('div');
+//         artistElement.className = 'artist-container';
+
+//         const artistImage = document.createElement('img');
+//         artistImage.src = artist.imageUrl;
+//         artistImage.alt = artist.name;
+//         artistImage.className = 'artist-image';
+//         artistImage.onload = () => {
+//             artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
+//         };
+
+//         const artistName = document.createElement('div');
+//         artistName.textContent = artist.name;
+//         artistName.className = 'artist-name';
+
+//         artistElement.appendChild(artistImage);
+//         artistElement.appendChild(artistName);
+
+//         artistElement.on('click', () => {
+//                 container.off('scroll', handleScroll);
+//                 container.innerHTML = ''
+//                 searchBar.value = ''
+//                 clearIcon.style.display = 'none'
+//                 fetchArtistDetails(artist.id);
+            
+//         });
+
+//         container.appendChild(artistElement);
+//     });
+// }

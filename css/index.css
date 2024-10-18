@@ -46,7 +46,7 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
-.artist-container {
+.top-artist-container {
     padding: 16px;
     aspect-ratio: 1 / 1;
     border-radius: 6px;
@@ -57,7 +57,7 @@ body {
     }
 }
 
-.artist-image {
+.top-artist-image {
     height: 100%;
     width: 100%;
     object-fit: cover;
@@ -78,7 +78,7 @@ body {
     }
 }
 
-.artist-name {
+.top-artist-name {
     height: 55px;
     padding-top: 8px;
     font-weight: 600;
@@ -203,7 +203,7 @@ body {
     }
 }
 
-.artist-images {
+.artist-image {
     position: absolute;
     top: -100%;
     left: 0;
@@ -212,7 +212,7 @@ body {
     transform: scale(1.05);
 }
 
-.artist-names {
+.artist-name {
     position: absolute;
     top: 120px;
     left: 16px;
@@ -228,7 +228,7 @@ body {
     animation: textAnimation 1.2s ease-in-out forwards;
 }
 
-.tracks-container {
+.artist-top-tracks-container {
     position: absolute;
     top: 360px;
     width: 100%;
@@ -237,6 +237,6 @@ body {
     z-index: 30;
 }
 
-.track-item {
+.top-track {
     padding: 16px;
 }
