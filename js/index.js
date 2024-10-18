@@ -23,6 +23,7 @@ Node.prototype.off = off;
 //================================================================================//
 
 const spotifyIcon = $('.spotify-icon');
+const searchBar = $('.search-bar')
 const clearIcon = $('.clear-icon');
 const container = $('.container');
 
@@ -41,6 +42,8 @@ window.on('DOMContentLoaded', () => {
         searchBar.value = ''
         fetchTopArtists()
     });
+
+    searchBar.on('input', debouncedHandler);
 
     clearIcon.on('click', () => {
         searchBar.value = ''
@@ -261,6 +264,23 @@ async function fetchArtistTopTracks(artistID) {
 
 
 // ===============================================================================//
+//                    MANEJADOR DE DEBOUNCING PARA LA BÚSQUEDA                    //
+//================================================================================//
+
+function debouncedHandler() {
+    clearTimeout(this.searchTimeout);
+
+    this.searchTimeout = setTimeout(() => {
+        if (this.value) {
+            container.innerHTML = '';
+            fetchArtists(this.value);
+        } 
+    }, 400);
+}
+
+
+
+// ===============================================================================//
 //                   MOSTRAR RESULTADOS DE BÚSQUEDA DE ARTISTAS                   //
 //================================================================================//
 
@@ -323,59 +343,4 @@ async function fetchArtists(artist) {
     } catch (error) {
         console.error('Error fetching artists:', error);
     }
-}
-
-
-
-// ===============================================================================//
-//                             NOMBRE PROVISIONAL                                 //
-//================================================================================//
-
-let debounceTimeout;
-const searchBar = $('.search-bar')
-
-container.on('scroll', handleScroll);
-searchBar.on('input', debouncedSearch);
-
-function handleScroll() {
-    if (isArtistView) return;
-    const isMainContainer = container.classList.contains('main-container');
-
-    if (!isMainContainer && !isLoading && container.scrollTop + container.clientHeight >= container.scrollHeight - 32) {
-        clearTimeout(debounceTimeout);
-
-        debounceTimeout = setTimeout(() => {
-            isLoading = true;
-            offset += 40;
-            fetchArtists(currentArtistQuery, offset).finally(() => {
-                isLoading = false;
-            });
-        },800);
-    }
-}
-
-function debouncedSearch() {
-    const artist = this.value;
-    clearTimeout(this.searchTimeout);
-
-    this.searchTimeout = setTimeout(() => {
-        container.classList.remove('main-container');
-        container.innerHTML = '';
-        container.classList.add('artists-container');
-
-        if (artist) {
-            offset = 0;
-            isArtistView = false;
-            container.innerHTML = '';
-            container.on('scroll', handleScroll);
-            clearIcon.style.display = 'inline'
-            fetchArtists(artist, offset);
-        } else {
-            container.off('scroll', handleScroll);
-            container.classList.remove('artists-container');
-            container.classList.add('main-container');
-            clearIcon.style.display = 'none'
-            fetchTopArtists();
-        }
-    }, 500);
 }
