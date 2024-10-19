@@ -29,13 +29,19 @@ export function DOMLoaded() {
         document.on('contextmenu', (event) => event.preventDefault());
 
         spotifyIcon.on('click', () => {
-            container.innerHTML = ''
-            searchBar.value = ''
-            fetchTopArtists()
+            searchBar.value = '';
+            clearIcon.style.display = 'none';
+            container.innerHTML = '';
+            fetchTopArtists();
         });
 
         clearIcon.on('click', () => {
-            searchBar.value = ''
+            searchBar.value = '';
+            clearIcon.style.display = 'none';
+        });
+
+        searchBar.on('input', () => {
+            clearIcon.style.display = searchBar.value ? 'inline' : 'none';
         });
 
         searchBar.on('input', debouncedHandler);

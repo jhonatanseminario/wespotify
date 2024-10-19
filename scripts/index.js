@@ -2,8 +2,8 @@
 //!                             IMPORTAR MÓDULOS                             !//
 //!==========================================================================!//
 
-import { getToken } from './modules/api.js'
-import { DOMLoaded, container } from './modules/dom.js'
+import { getToken } from './modules/api.js';
+import { DOMLoaded, searchBar, clearIcon, container } from './modules/dom.js';
 
 DOMLoaded();
 
@@ -57,7 +57,7 @@ export async function fetchTopArtists() {
             topArtistImage.alt = artist.name;
             topArtistImage.onload = () => {
                 topArtistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
-            };
+            }
     
             topArtistName.className = 'artist-name';
             topArtistName.textContent = artist.name;
@@ -71,6 +71,9 @@ export async function fetchTopArtists() {
 
             // AGREGAR EVENTOS A LOS ELEMENTOS
             topArtistContainer.on('click', () => {
+                searchBar.value = '';
+                clearIcon.style.display = 'none';
+                container.innerHTML = '';
                 fetchArtistDetails(artist.id); 
             });
         });
@@ -223,7 +226,7 @@ export async function fetchArtists(artist) {
             artistImage.alt = artist.name;
             artistImage.onload = () => {
                 artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
-            };
+            }
     
             artistName.className = 'artist-name';
             artistName.textContent = artist.name;
@@ -237,6 +240,9 @@ export async function fetchArtists(artist) {
 
             // AGREGAR EVENTOS A LOS ELEMENTOS
             artistContainer.on('click', () => {
+                searchBar.value = '';
+                clearIcon.style.display = 'none';
+                container.innerHTML = '';
                 fetchArtistDetails(artist.id); 
             });
         });
