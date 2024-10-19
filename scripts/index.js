@@ -1,101 +1,19 @@
-// ===============================================================================//
-//               HELPERS PARA SELECTORES Y ESCUCHADORES DE EVENTOS                //
-//================================================================================//
+//!==========================================================================!//
+//!                             IMPORTAR MÓDULOS                             !//
+//!==========================================================================!//
 
-const $ = selector => document.querySelector(selector);
-const $$ = selector => document.querySelectorAll(selector);
+import { getToken } from './modules/api.js'
+import { DOMLoaded, container } from './modules/dom.js'
 
-function on(event, handler) {
-    this.addEventListener(event, handler);
-}
-
-function off(event, handler) {
-    this.removeEventListener(event, handler);
-}
-
-Node.prototype.on = on;
-Node.prototype.off = off;
+DOMLoaded();
 
 
 
-// ===============================================================================//
-//                         INICIALIZAR CONSTANTES GLOBALES                        //
-//================================================================================//
+//*==========================================================================*//
+//*                       MOSTRAR ARTISTAS DESTACADOS                        *//
+//*==========================================================================*//
 
-const spotifyIcon = $('.spotify-icon');
-const searchBar = $('.search-bar')
-const clearIcon = $('.clear-icon');
-const container = $('.container');
-
-
-
-// ===============================================================================//
-//                     AGREGAR ESCUCHADORES AL CARGAR EL DOM                      //
-//================================================================================//
-
-window.on('DOMContentLoaded', () => {
-    document.on('dragstart', (event) => event.preventDefault());
-    document.on('contextmenu', (event) => event.preventDefault());
-
-    spotifyIcon.on('click', () => {
-        container.innerHTML = ''
-        searchBar.value = ''
-        fetchTopArtists()
-    });
-
-    searchBar.on('input', debouncedHandler);
-
-    clearIcon.on('click', () => {
-        searchBar.value = ''
-    });
-
-    fetchTopArtists();
-});
-
-
-
-// ===============================================================================//
-//                  OBTENER TOKEN DE ACCESO A LA API DE SPOTIFY                   //
-//================================================================================//
-
-async function getToken() {
-    const clientId = '0d2db64a6bff43769f27c1ee87901f09';
-    const clientSecret = '963dc919e09344dcb5377168e44bb941';
-    const endpoint = 'https://accounts.spotify.com/api/token';
-    const credentials = btoa(`${clientId}:${clientSecret}`);
-
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Basic ${credentials}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                grant_type: 'client_credentials'
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const token = data.access_token;
-        return token;
-
-    } catch (error) {
-        console.error('Error fetching token:', error);
-    }
-}
-
-
-
-// ===============================================================================//
-//                          MOSTRAR ARTISTAS DESTACADOS                           //
-//================================================================================//
-
-async function fetchTopArtists() {
+export async function fetchTopArtists() {
     const token = await getToken();
     const top50GlobalPlaylistId = '37i9dQZEVXbMDoHDwVN2tF';
 
@@ -164,11 +82,11 @@ async function fetchTopArtists() {
 
 
 
-// ===============================================================================//
-//                           MOSTRAR PERFIL DEL ARTISTA                           //
-//================================================================================//
+//*==========================================================================*//
+//*                        MOSTRAR PERFIL DEL ARTISTA                        *//
+//*==========================================================================*//
 
-async function fetchArtistDetails(artistID) {
+export async function fetchArtistDetails(artistID) {
     const token = await getToken();
     
     try {
@@ -216,7 +134,7 @@ async function fetchArtistDetails(artistID) {
         // LLAMAR FUNCIÓN PARA BUSCAR PISTAS MÁS POPULARES
         const artistTopTracksArray = await fetchArtistTopTracks(artistID);
 
-        artistTopTracksContainer = document.createElement('div');
+        const artistTopTracksContainer = document.createElement('div');
         artistTopTracksContainer.className = 'artist-top-tracks-container';
 
         artistTopTracksArray.forEach(track => {
@@ -237,11 +155,11 @@ async function fetchArtistDetails(artistID) {
 
 
 
-// ===============================================================================//
-//                      OBTENER PISTAS POPULARES DEL ARTISTA                      //
-//================================================================================//
+//*==========================================================================*//
+//*                   OBTENER PISTAS POPULARES DEL ARTISTA                   *//
+//*==========================================================================*//
 
-async function fetchArtistTopTracks(artistID) {
+export async function fetchArtistTopTracks(artistID) {
     const token = await getToken();
 
     try {
@@ -263,28 +181,11 @@ async function fetchArtistTopTracks(artistID) {
 
 
 
-// ===============================================================================//
-//                    MANEJADOR DE DEBOUNCING PARA LA BÚSQUEDA                    //
-//================================================================================//
+//*==========================================================================*//
+//*                MOSTRAR RESULTADOS DE BÚSQUEDA DE ARTISTAS                *//
+//*==========================================================================*//
 
-function debouncedHandler() {
-    clearTimeout(this.searchTimeout);
-
-    this.searchTimeout = setTimeout(() => {
-        if (this.value) {
-            container.innerHTML = '';
-            fetchArtists(this.value);
-        } 
-    }, 400);
-}
-
-
-
-// ===============================================================================//
-//                   MOSTRAR RESULTADOS DE BÚSQUEDA DE ARTISTAS                   //
-//================================================================================//
-
-async function fetchArtists(artist) {
+export async function fetchArtists(artist) {
     const token = await getToken();
 
     try {
