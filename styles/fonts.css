@@ -1,0 +1,13 @@
+/**==========================================================================**/
+/**                       FUENTES OFICIALES DE SPOTIFY                       **/
+/**==========================================================================**/
+
+@font-face {
+    font-family: 'Spotify Mix';
+    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Spotify Mix Title';
+    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
+}

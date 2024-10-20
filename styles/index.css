@@ -1,17 +1,17 @@
-@font-face {
-    font-family: 'Spotify Mix';
-    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
-}
+/*!==========================================================================!*/
+/*!                             IMPORTAR ESTILOS                             !*/
+/*!==========================================================================!*/
 
-@font-face {
-    font-family: 'Spotify Mix Title';
-    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
-}
+@import '/styles/reset.css';
+@import '/styles/fonts.css';
+@import '/styles/animations.css';
+
+
+/**==========================================================================**/
+/**                             ESILOS GENERALES                             **/
+/**==========================================================================**/
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
     font-family: 'Spotify Mix', sans-serif;
     user-select: none;
 }
@@ -67,17 +67,6 @@ body {
     opacity: 0;
 }
 
-@keyframes artistsAnimation {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(100%);
-        opacity: 1;
-    }
-}
-
 .artist-name {
     height: 55px;
     padding-top: 8px;
@@ -91,15 +80,6 @@ body {
     top: 250px;
     width: 100%;
     z-index: 10;
-}
-
-@keyframes textAnimation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
 }
 
 .search-container {

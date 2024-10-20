@@ -2,8 +2,8 @@
 //!                             IMPORTAR MÓDULOS                             !//
 //!==========================================================================!//
 
-import { getToken } from './modules/api.js';
-import { DOMLoaded, searchBar, clearIcon, container } from './modules/dom.js';
+import { getToken } from './modules/access-token.js';
+import { DOMLoaded, searchBar, clearIcon, container } from './modules/dom-events.js';
 
 DOMLoaded();
 

@@ -2,7 +2,7 @@
 //!                             IMPORTAR MÓDULOS                             !//
 //!==========================================================================!//
 
-import { container } from './dom.js';
+import { container } from './dom-events.js';
 import { fetchArtists } from '../index.js';
 
 
