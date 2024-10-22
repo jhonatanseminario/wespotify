@@ -16,38 +16,121 @@ body {
     color: #ffffff;
     font-family: 'Spotify Mix', sans-serif;
     height: 100vh;
-    position: relative;
     text-align: center;
     user-select: none;
 }
 
 
-
 /**==========================================================================**/
-/**                            ESILOS ESPECÍFICOS                            **/
+/**                           CONTENEDOR PRINCIPAL                           **/
 /**==========================================================================**/
-
-.main-container,
-.artists-container {
-    position: absolute;
-    top: 64px;
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    padding: 32px 24px;
-    overflow: scroll;
-    min-height: 500px;
-    min-width: 800px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    border-radius: 8px;
-    overflow-x: hidden;
-    background-color: #121212;
-}
 
 .main-container {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-content: start;
+    background-color: #121212;
+    border-radius: 8px;
+    bottom: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    left: 16px;
+    min-height: 500px;
+    min-width: 800px;
+    overflow-x: hidden;
+    padding: 32px 24px;
+    position: absolute;
+    right: 16px;
+    top: 64px;
 }
+
+
+/**==========================================================================**/
+/**                            BARRA DE BÚSQUEDA                             **/
+/**==========================================================================**/
+
+.search-container {
+    min-width: 600px;
+}
+
+.search-bar {
+    background-color: #1f1f1f;
+    border-radius: 24px;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 16px;
+    height: 48px;
+    margin-left: 80px;
+    margin-top: 8px;
+    outline: 3px solid transparent;
+    padding-left: 48px;
+    transition: all .3s ease;
+    width: 480px;
+
+    &::placeholder {
+        color: #b3b3b3;
+        font-family: 'Spotify Mix', sans-serif;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: #2a2a2a;
+    }
+
+    &:focus {
+        cursor: text;
+        outline: 3px solid #ffffff;
+        outline-offset: -3px;
+    }
+
+    &:hover ~ .search-icon {
+        filter: brightness(100);
+    }
+
+    &:focus ~ .search-icon {
+        filter: brightness(100);
+    }
+}
+
+.search-icon,
+.clear-icon {
+    cursor: pointer;
+    height: 24px;
+    position: relative;
+    top: 8px;
+}
+
+.search-icon {
+    right: 470px;
+    transition: filter .1s;
+
+    &:hover {
+        filter: brightness(100);
+    }
+}
+
+.clear-icon {
+    display: none;
+    right: 70px;
+    transition: filter .1s, transform .1s;
+
+    &:hover {
+        filter: brightness(100);
+        transform: scale(1.01);
+    }
+}
+
+.spotify-icon {
+    cursor: pointer;
+    height: 32px;
+    left: 28px;
+    position: absolute;
+    top: 16px;
+}
+
+
+/**==========================================================================**/
+/**                            TARJETA DE ARTISTA                            **/
+/**==========================================================================**/
 
 .artist-container {
     padding: 16px;
@@ -78,96 +161,10 @@ body {
     animation: textAnimation .8s ease-in-out forwards;
 }
 
-.artist-followers {
-    position: absolute;
-    top: 250px;
-    width: 100%;
-    z-index: 10;
-}
 
-.search-container {
-    position: relative;
-    min-width: 600px;
-}
-
-.search-bar {
-    width: 480px;
-    height: 48px;
-    margin-top: 8px;
-    margin-left: 80px;
-    padding-right: 16px;
-    padding-left: 48px;
-    border: none;
-    border-radius: 24px;
-    outline: 3px solid transparent;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #1f1f1f;
-    cursor: pointer;
-    transition: all 0.3s ease-in;
-
-    &::placeholder {
-        color: #b3b3b3;
-        font-family: 'Spotify Mix', sans-serif;
-    }
-
-    &:hover {
-        background-color: #2a2a2a;
-    }
-
-    &:focus {
-        background-color: #2a2a2a;
-        outline: 3px solid #ffffff;
-        outline-offset: -3px;
-        cursor: text;
-    }
-
-    &:hover ~ .search-icon {
-        filter: brightness(100);
-    }
-
-    &:focus ~ .search-icon {
-        filter: brightness(100);
-    }
-}
-
-.search-icon,
-.clear-icon {
-    position: relative;
-    top: 7px;
-    right: 470px;
-    height: 25px;
-    width: 24px;
-    cursor: pointer;
-}
-
-.search-icon {
-    transition: filter .1s;
-
-    &:hover {
-        filter: brightness(100);
-    }
-}
-
-.clear-icon {
-    display: none;
-    right: 70px;
-    transition: filter .1s, transform .1s;
-
-    &:hover {
-        filter: brightness(100);
-        transform: scale(1.01);
-    }
-}
-
-.spotify-icon {
-    position: absolute;
-    top: 16px;
-    left: 28px;
-    height: 32px;
-    cursor: pointer;
-    z-index: 1;
-}
+/**==========================================================================**/
+/**                            PERFIL DE ARTISTA                             **/
+/**==========================================================================**/
 
 .profile-artist-image-container {
     position: absolute;
@@ -181,7 +178,7 @@ body {
         position: absolute;
         width: 100%;
         height: 300px;
-        z-index: 10;
+        z-index: 20;
         background: linear-gradient(to right, #00000066, #00000033);
     }
 }
@@ -206,7 +203,7 @@ body {
     font-family: 'Spotify Mix Title', sans-serif;
     font-weight: 800;
     font-size: 96px;
-    z-index: 20;
+    z-index: 40;
     user-select: none;
     animation: textAnimation 1.2s ease-in-out forwards;
 }
@@ -217,9 +214,16 @@ body {
     width: 100%;
     padding-bottom: 64px;
     text-align: center;
-    z-index: 30;
+    z-index: 50;
 }
 
 .top-track {
     padding: 16px;
+}
+
+.profile-artist-followers {
+    position: absolute;
+    top: 250px;
+    width: 100%;
+    z-index: 30;
 }

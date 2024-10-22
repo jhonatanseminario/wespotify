@@ -7,7 +7,6 @@ import { fetchTopArtists } from '../index.js';
 import { debouncedHandler } from './debouncing.js';
 
 
-
 //*==========================================================================*//
 //*                     INICIALIZAR CONSTANTES GLOBALES                      *//
 //*==========================================================================*//
@@ -15,8 +14,7 @@ import { debouncedHandler } from './debouncing.js';
 export const spotifyIcon = $('.spotify-icon');
 export const searchBar = $('.search-bar');
 export const clearIcon = $('.clear-icon');
-export const container = $('.container');
-
+export const container = $('.main-container');
 
 
 //*==========================================================================*//

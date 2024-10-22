@@ -8,7 +8,6 @@ import { DOMLoaded, searchBar, clearIcon, container } from './modules/dom-events
 DOMLoaded();
 
 
-
 //*==========================================================================*//
 //*                       MOSTRAR ARTISTAS DESTACADOS                        *//
 //*==========================================================================*//
@@ -84,7 +83,6 @@ export async function fetchTopArtists() {
 }
 
 
-
 //*==========================================================================*//
 //*                        MOSTRAR PERFIL DEL ARTISTA                        *//
 //*==========================================================================*//
@@ -157,7 +155,6 @@ export async function fetchArtistDetails(artistID) {
 }
 
 
-
 //*==========================================================================*//
 //*                   OBTENER PISTAS POPULARES DEL ARTISTA                   *//
 //*==========================================================================*//
@@ -181,7 +178,6 @@ export async function fetchArtistTopTracks(artistID) {
         console.error('Error fetching artist top tracks:', error);
     }
 }
-
 
 
 //*==========================================================================*//
