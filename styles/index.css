@@ -11,18 +11,21 @@
 /**                             ESILOS GENERALES                             **/
 /**==========================================================================**/
 
-* {
+body {
+    background-color: #000000;
+    color: #ffffff;
     font-family: 'Spotify Mix', sans-serif;
+    height: 100vh;
+    position: relative;
+    text-align: center;
     user-select: none;
 }
 
-body {
-    position: relative;
-    height: 100vh;
-    text-align: center;
-    color: #ffffff;
-    background-color: #000000;
-}
+
+
+/**==========================================================================**/
+/**                            ESILOS ESPECÍFICOS                            **/
+/**==========================================================================**/
 
 .main-container,
 .artists-container {
