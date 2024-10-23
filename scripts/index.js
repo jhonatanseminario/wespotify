@@ -103,18 +103,14 @@ export async function fetchArtistDetails(artistID) {
         
 
         // CREAR ELEMENTOS
-        const artistImageContainer = document.createElement('div');
-        const artistImage = document.createElement('img');
+        const artistImage = document.createElement('div');
         const artistName = document.createElement('div');
         const artistFollowers = document.createElement('div');
 
 
         // MODIFICAR ELEMENTOS
-        artistImageContainer.className = 'profile-artist-image-container';
-
         artistImage.className = 'profile-artist-image';
-        artistImage.src = data.images[1].url;
-        artistImage.alt = `${data.name} - Imagen`;
+        artistImage.style.backgroundImage = `url(${data.images[0].url})`
 
         artistName.className = 'profile-artist-name';
         artistName.textContent = `${data.name}`;
@@ -126,8 +122,7 @@ export async function fetchArtistDetails(artistID) {
 
 
         // AGREGAR ELEMENTOS
-        artistImageContainer.appendChild(artistImage);
-        container.appendChild(artistImageContainer);
+        container.appendChild(artistImage);
         container.appendChild(artistName);
         container.appendChild(artistFollowers);
 

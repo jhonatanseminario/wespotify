@@ -167,30 +167,14 @@ body {
 /**                            PERFIL DE ARTISTA                             **/
 /**==========================================================================**/
 
-.profile-artist-image-container {
-    position: absolute;
-    width: 100%;
-    height: 300px;
-    overflow: hidden;
-
-    &::before {
-        content: '';
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 300px;
-        z-index: 20;
-        background: linear-gradient(to right, #00000066, #00000033);
-    }
-}
-
 .profile-artist-image {
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    filter: brightness(.7);
+    height: 300px;
     position: absolute;
-    top: -100%;
-    left: 0;
     width: 100%;
-    filter: blur(8px);
-    transform: scale(1.05);
 }
 
 .profile-artist-name {
@@ -204,7 +188,7 @@ body {
     font-family: 'Spotify Mix Title', sans-serif;
     font-weight: 800;
     font-size: 96px;
-    z-index: 40;
+    z-index: 30;
     user-select: none;
     animation: textAnimation 1.2s ease-in-out forwards;
 }
@@ -215,7 +199,7 @@ body {
     width: 100%;
     padding-bottom: 64px;
     text-align: center;
-    z-index: 50;
+    z-index: 40;
 }
 
 .top-track {
@@ -226,5 +210,5 @@ body {
     position: absolute;
     top: 250px;
     width: 100%;
-    z-index: 30;
+    z-index: 20;
 }
