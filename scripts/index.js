@@ -55,7 +55,7 @@ export async function fetchTopArtists() {
             topArtistImage.src = artist.imageUrl;
             topArtistImage.alt = artist.name;
             topArtistImage.onload = () => {
-                topArtistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
+                topArtistImage.style.animation = 'scaleFadeIn .4s ease-in-out forwards';
             }
     
             topArtistName.className = 'artist-name';
@@ -221,7 +221,7 @@ export async function fetchArtists(artist) {
             artistImage.src = artist.imageUrl;
             artistImage.alt = artist.name;
             artistImage.onload = () => {
-                artistImage.style.animation = 'artistsAnimation .4s ease-in-out forwards';
+                artistImage.style.animation = 'scaleFadeIn .4s ease-in-out forwards';
             }
     
             artistName.className = 'artist-name';

@@ -57,6 +57,7 @@ body {
     border: none;
     color: #ffffff;
     cursor: pointer;
+    font-family: 'Spotify Mix', sans-serif;
     font-size: 16px;
     height: 48px;
     margin-left: 80px;
@@ -133,10 +134,10 @@ body {
 /**==========================================================================**/
 
 .artist-container {
-    padding: 16px;
     aspect-ratio: 1 / 1;
     border-radius: 6px;
     cursor: pointer;
+    padding: 16px;
 
     &:hover {
         background-color: #1d1d1d;
@@ -144,21 +145,21 @@ body {
 }
 
 .artist-image {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 100%;
-    box-shadow: 0 0 16px 8px #00000066;
     background-color: #333333;
+    border-radius: 100%;
+    box-shadow: 0 8px 24px rgb(0, 0, 0, .4);
+    height: 100%;
+    object-fit: cover;
     opacity: 0;
+    width: 100%;
 }
 
 .artist-name {
-    height: 55px;
-    padding-top: 8px;
-    font-weight: 600;
+    animation: fadeIn .8s ease-in-out forwards;
+    font-weight: 500;
+    height: 58px;
     overflow: hidden;
-    animation: textAnimation .8s ease-in-out forwards;
+    padding-top: 16px;
 }
 
 
