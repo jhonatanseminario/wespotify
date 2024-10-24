@@ -43,13 +43,13 @@ export async function fetchTopArtists() {
         topArtistsArray.forEach(artist => {
 
             // CREAR ELEMENTOS
-            const topArtistContainer = document.createElement('div');
+            const topArtistCard = document.createElement('div');
             const topArtistImage = document.createElement('img');
             const topArtistName = document.createElement('div');
 
 
             // MODIFICAR ELEMENTOS
-            topArtistContainer.className = 'artist-container';
+            topArtistCard.className = 'artist-card';
 
             topArtistImage.className = 'artist-image';
             topArtistImage.src = artist.imageUrl;
@@ -63,13 +63,13 @@ export async function fetchTopArtists() {
 
 
             // AGREGAR ELEMENTOS
-            topArtistContainer.appendChild(topArtistImage);
-            topArtistContainer.appendChild(topArtistName);
-            container.appendChild(topArtistContainer);
+            topArtistCard.appendChild(topArtistImage);
+            topArtistCard.appendChild(topArtistName);
+            container.appendChild(topArtistCard);
             
 
             // AGREGAR EVENTOS A LOS ELEMENTOS
-            topArtistContainer.on('click', () => {
+            topArtistCard.on('click', () => {
                 searchBar.value = '';
                 clearIcon.style.display = 'none';
                 container.innerHTML = '';
@@ -114,9 +114,12 @@ export async function fetchArtistDetails(artistID) {
 
         artistName.className = 'profile-artist-name';
         artistName.textContent = `${data.name}`;
+        if (data.name.length > 23) {
+            artistName.classList.add('long-artist-name');
+        }
 
         artistFollowers.className = 'profile-artist-followers';
-        artistFollowers.textContent = `${data.followers.total} Seguidores`;
+        artistFollowers.textContent = `${data.followers.total} seguidores`;
 
         container.innerHTML = '';
 
@@ -131,7 +134,7 @@ export async function fetchArtistDetails(artistID) {
         const artistTopTracksArray = await fetchArtistTopTracks(artistID);
 
         const artistTopTracksContainer = document.createElement('div');
-        artistTopTracksContainer.className = 'artist-top-tracks-container';
+        artistTopTracksContainer.className = 'profile-artist-tracks';
 
         artistTopTracksArray.forEach(track => {
             const topTrack = document.createElement('div');
@@ -204,13 +207,13 @@ export async function fetchArtists(artist) {
         artistsArray.forEach(artist => {
 
             // CREAR ELEMENTOS
-            const artistContainer = document.createElement('div');
+            const artistCard = document.createElement('div');
             const artistImage = document.createElement('img');
             const artistName = document.createElement('div');
 
 
             // MODIFICAR ELEMENTOS
-            artistContainer.className = 'artist-container';
+            artistCard.className = 'artist-card';
 
             artistImage.className = 'artist-image';
             artistImage.src = artist.imageUrl;
@@ -224,13 +227,13 @@ export async function fetchArtists(artist) {
 
 
             // AGREGAR ELEMENTOS
-            artistContainer.appendChild(artistImage);
-            artistContainer.appendChild(artistName);
-            container.appendChild(artistContainer);
+            artistCard.appendChild(artistImage);
+            artistCard.appendChild(artistName);
+            container.appendChild(artistCard);
             
 
             // AGREGAR EVENTOS A LOS ELEMENTOS
-            artistContainer.on('click', () => {
+            artistCard.on('click', () => {
                 searchBar.value = '';
                 clearIcon.style.display = 'none';
                 container.innerHTML = '';

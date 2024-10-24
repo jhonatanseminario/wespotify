@@ -44,7 +44,7 @@ body {
 
 
 /**==========================================================================**/
-/**                            BARRA DE BÚSQUEDA                             **/
+/**                      ÁREA DE BÚSQUEDA Y NAVEGACIÓN                       **/
 /**==========================================================================**/
 
 .search-container {
@@ -133,7 +133,7 @@ body {
 /**                            TARJETA DE ARTISTA                            **/
 /**==========================================================================**/
 
-.artist-container {
+.artist-card {
     aspect-ratio: 1 / 1;
     border-radius: 6px;
     cursor: pointer;
@@ -168,47 +168,42 @@ body {
 /**==========================================================================**/
 
 .profile-artist-image {
+    animation: fadeIn .4s ease-in-out .4s forwards;
     background-attachment: fixed;
     background-position: center;
     background-size: cover;
-    filter: brightness(.7);
+    filter: brightness(.6);
     height: 300px;
+    opacity: 0;
     position: absolute;
     width: 100%;
 }
 
 .profile-artist-name {
+    animation: fadeIn .4s ease-in-out forwards;
+    font-size: clamp(4rem, 8vw, 6rem);
+    font-weight: 800;
+    padding-inline: 32px;
     position: absolute;
     top: 120px;
-    left: 16px;
     width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-family: 'Spotify Mix Title', sans-serif;
-    font-weight: 800;
-    font-size: 96px;
-    z-index: 30;
-    user-select: none;
-    animation: textAnimation 1.2s ease-in-out forwards;
 }
 
-.artist-top-tracks-container {
-    position: absolute;
-    top: 360px;
-    width: 100%;
-    padding-bottom: 64px;
-    text-align: center;
-    z-index: 40;
-}
-
-.top-track {
-    padding: 16px;
+.long-artist-name {
+    top: 80px;
+    font-size: clamp(4rem, 4vw, 6rem);
 }
 
 .profile-artist-followers {
+    animation: fadeIn .2s ease-in-out forwards;
     position: absolute;
+    text-shadow: 0 0 4px rgba(0, 0, 0, .8);
     top: 250px;
     width: 100%;
-    z-index: 20;
+}
+
+.profile-artist-tracks {
+    position: absolute;
+    top: 360px;
+    width: 100%;
 }
