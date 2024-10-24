@@ -5,6 +5,7 @@
 @import '/styles/reset.css';
 @import '/styles/fonts.css';
 @import '/styles/animations.css';
+@import '/styles/custom-properties.css';
 
 
 /**==========================================================================**/
@@ -12,8 +13,8 @@
 /**==========================================================================**/
 
 body {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: black;
+    color: white;
     font-family: 'Spotify Mix', sans-serif;
     height: 100vh;
     text-align: center;
@@ -27,7 +28,7 @@ body {
 
 .main-container {
     align-content: start;
-    background-color: #121212;
+    background-color: var(--color-dark-gray-1);
     border-radius: 8px;
     bottom: 16px;
     display: grid;
@@ -52,10 +53,10 @@ body {
 }
 
 .search-bar {
-    background-color: #1f1f1f;
+    background-color: var(--color-dark-gray-2);
     border-radius: 24px;
     border: none;
-    color: #ffffff;
+    color: white;
     cursor: pointer;
     font-family: 'Spotify Mix', sans-serif;
     font-size: 16px;
@@ -68,18 +69,18 @@ body {
     width: 480px;
 
     &::placeholder {
-        color: #b3b3b3;
+        color: var(--color-light-gray-1);
         font-family: 'Spotify Mix', sans-serif;
     }
 
     &:hover,
     &:focus {
-        background-color: #2a2a2a;
+        background-color: var(--color-dark-gray-3);
     }
 
     &:focus {
         cursor: text;
-        outline: 3px solid #ffffff;
+        outline: 3px solid white;
         outline-offset: -3px;
     }
 
@@ -140,12 +141,16 @@ body {
     padding: 16px;
 
     &:hover {
-        background-color: #1d1d1d;
+        background-color: var(--color-dark-gray-2);
+    }
+
+    &:active {
+        background-color: black;
     }
 }
 
 .artist-image {
-    background-color: #333333;
+    background-color: var(--color-dark-gray-4);
     border-radius: 100%;
     box-shadow: 0 8px 24px rgb(0, 0, 0, .4);
     height: 100%;
