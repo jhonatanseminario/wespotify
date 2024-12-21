@@ -14,10 +14,10 @@ DOMLoaded();
 
 export async function fetchTopArtists() {
     const token = await getToken();
-    const top50GlobalPlaylistId = '37i9dQZEVXbMDoHDwVN2tF';
+    const billboardHot100PlaylistId = '6UeSakyzhiEt4NB3UAd6NQ';
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/playlists/${top50GlobalPlaylistId}`, {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${billboardHot100PlaylistId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -38,7 +38,7 @@ export async function fetchTopArtists() {
             }
         });
 
-        topArtistsArray.splice(20);
+        topArtistsArray.splice(30);
 
         topArtistsArray.forEach(artist => {
 
@@ -55,7 +55,7 @@ export async function fetchTopArtists() {
             topArtistImage.src = artist.imageUrl;
             topArtistImage.alt = artist.name;
             topArtistImage.onload = () => {
-                topArtistImage.style.animation = 'scaleFadeIn .4s ease-in-out forwards';
+                topArtistImage.style.animation = 'scaleFadeIn .2s ease-in-out forwards';
             }
     
             topArtistName.className = 'artist-name';
@@ -186,7 +186,7 @@ export async function fetchArtists(artist) {
     const token = await getToken();
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist`, {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -219,7 +219,7 @@ export async function fetchArtists(artist) {
             artistImage.src = artist.imageUrl;
             artistImage.alt = artist.name;
             artistImage.onload = () => {
-                artistImage.style.animation = 'scaleFadeIn .4s ease-in-out forwards';
+                artistImage.style.animation = 'scaleFadeIn .2s ease-in-out forwards';
             }
     
             artistName.className = 'artist-name';
