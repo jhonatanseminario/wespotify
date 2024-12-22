@@ -124,22 +124,22 @@ export async function fetchArtistDetails(artistID) {
         artistFollowers.className = 'profile-artist-followers';
         artistFollowers.textContent = `${data.followers.total} seguidores`;
 
-        container.innerHTML = '';
-
         // LLAMAR FUNCIÓN PARA BUSCAR PISTAS MÁS POPULARES
         const artistTopTracksArray = await fetchArtistTopTracks(artistID);
-
+        
         const artistTopTracksContainer = document.createElement('div');
         artistTopTracksContainer.className = 'profile-artist-tracks';
-
+        
         artistTopTracksArray.forEach(track => {
             const topTrack = document.createElement('div');
-
+            
             topTrack.className = 'top-track';
             topTrack.textContent = track.name;
-
+            
             artistTopTracksContainer.appendChild(topTrack);
         });
+        
+        container.innerHTML = '';
 
         // AGREGAR ELEMENTOS
         container.appendChild(artistImage);
