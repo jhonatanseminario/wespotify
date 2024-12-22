@@ -40,6 +40,8 @@ export async function fetchTopArtists() {
 
         topArtistsArray.splice(30);
 
+        container.innerHTML = '';
+
         topArtistsArray.forEach(artist => {
 
             // CREAR ELEMENTOS
@@ -110,7 +112,8 @@ export async function fetchArtistDetails(artistID) {
 
         // MODIFICAR ELEMENTOS
         artistImage.className = 'profile-artist-image';
-        artistImage.style.backgroundImage = `url(${data.images[0].url})`
+        const imageUrl = data.images[0]?.url || '/assets/icons/artist-fallback-icon.svg';
+        artistImage.style.backgroundImage = `url(${imageUrl})`;
 
         artistName.className = 'profile-artist-name';
         artistName.textContent = `${data.name}`;
@@ -123,13 +126,6 @@ export async function fetchArtistDetails(artistID) {
 
         container.innerHTML = '';
 
-
-        // AGREGAR ELEMENTOS
-        container.appendChild(artistImage);
-        container.appendChild(artistName);
-        container.appendChild(artistFollowers);
-
-        
         // LLAMAR FUNCIÓN PARA BUSCAR PISTAS MÁS POPULARES
         const artistTopTracksArray = await fetchArtistTopTracks(artistID);
 
@@ -144,6 +140,11 @@ export async function fetchArtistDetails(artistID) {
 
             artistTopTracksContainer.appendChild(topTrack);
         });
+
+        // AGREGAR ELEMENTOS
+        container.appendChild(artistImage);
+        container.appendChild(artistName);
+        container.appendChild(artistFollowers);
 
         container.appendChild(artistTopTracksContainer);
 
@@ -203,6 +204,8 @@ export async function fetchArtists(artist) {
             const imageUrl = artist.images[1]?.url || '/assets/icons/artist-fallback-icon.svg';
             artistsArray.push({ id, name, imageUrl });
         });
+
+        container.innerHTML = '';
 
         artistsArray.forEach(artist => {
 
