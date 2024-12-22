@@ -183,11 +183,14 @@ export async function fetchArtistTopTracks(artistID) {
 //*                MOSTRAR RESULTADOS DE BÚSQUEDA DE ARTISTAS                *//
 //*==========================================================================*//
 
-export async function fetchArtists(artist) {
+let offset = 0;
+
+export async function fetchArtists(artist, loadMore = false) {
     const token = await getToken();
+    if (!loadMore) offset = 0;
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30`, {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=artist&limit=30&offset=${offset}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -205,7 +208,7 @@ export async function fetchArtists(artist) {
             artistsArray.push({ id, name, imageUrl });
         });
 
-        container.innerHTML = '';
+        if (!loadMore) container.innerHTML = '';
 
         artistsArray.forEach(artist => {
 
@@ -243,6 +246,11 @@ export async function fetchArtists(artist) {
                 fetchArtistDetails(artist.id); 
             });
         });
+
+        document.getElementById('buscar').onclick = () => {
+            offset += 30;
+            fetchArtists(artist, true);
+        };
         
     } catch (error) {
         console.error('Error fetching artists:', error);
