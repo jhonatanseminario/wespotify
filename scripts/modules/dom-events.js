@@ -3,7 +3,7 @@
 //!==========================================================================!//
 
 import { $ } from './helpers.js';
-import { fetchTopArtists } from '../index.js';
+import { fetchMoreArtists, fetchTopArtists } from '../index.js';
 import { debouncedHandler } from './debouncing.js';
 
 
@@ -43,6 +43,7 @@ export function DOMLoaded() {
         });
 
         searchBar.on('input', debouncedHandler);
+        container.on('scroll', fetchMoreArtists);
 
         fetchTopArtists();
     });

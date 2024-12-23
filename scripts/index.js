@@ -246,13 +246,24 @@ export async function fetchArtists(artist, loadMore = false) {
                 fetchArtistDetails(artist.id); 
             });
         });
-
-        document.getElementById('buscar').onclick = () => {
-            offset += 30;
-            fetchArtists(artist, true);
-        };
         
     } catch (error) {
         console.error('Error fetching artists:', error);
+    }
+}
+
+
+//*==========================================================================*//
+//*               CARGAR MÁS RESULTADOS DE BÚSQUEDA DE ARTISTAS              *//
+//*==========================================================================*//
+
+let loading = false;
+
+export function fetchMoreArtists() {
+    if (container.scrollHeight - container.scrollTop - container.clientHeight < 32 && !loading) {
+        loading = true;
+        offset += 30;
+        fetchArtists(searchBar.value, true);
+        setTimeout(() => loading = false, 1000);
     }
 }
