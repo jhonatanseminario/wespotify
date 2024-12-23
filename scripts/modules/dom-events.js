@@ -30,6 +30,7 @@ export function DOMLoaded() {
             searchBar.value = '';
             clearIcon.style.display = 'none';
             container.innerHTML = '';
+            container.classList.remove('artists-container');
             fetchTopArtists();
         });
 

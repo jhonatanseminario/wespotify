@@ -56,9 +56,8 @@ export async function fetchTopArtists() {
             topArtistImage.className = 'artist-image';
             topArtistImage.src = artist.imageUrl;
             topArtistImage.alt = artist.name;
-            topArtistImage.onload = () => {
-                topArtistImage.style.animation = 'scaleFadeIn .2s ease-in-out forwards';
-            }
+            topArtistImage.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            topArtistImage.style.animation = 'fadeIn .2s ease-in-out forwards';
     
             topArtistName.className = 'artist-name';
             topArtistName.textContent = artist.name;
@@ -224,9 +223,10 @@ export async function fetchArtists(artist, loadMore = false) {
             artistImage.className = 'artist-image';
             artistImage.src = artist.imageUrl;
             artistImage.alt = artist.name;
-            artistImage.onload = () => {
-                artistImage.style.animation = 'scaleFadeIn .2s ease-in-out forwards';
+            if (!artist.imageUrl.includes('/assets/icons/artist-fallback-icon.svg')) {
+                artistImage.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
             }
+            artistImage.style.animation = 'fadeIn .2s ease-in-out forwards';
     
             artistName.className = 'artist-name';
             artistName.textContent = artist.name;
@@ -243,8 +243,11 @@ export async function fetchArtists(artist, loadMore = false) {
                 searchBar.value = '';
                 clearIcon.style.display = 'none';
                 container.innerHTML = '';
+                container.classList.remove('artists-container');
                 fetchArtistDetails(artist.id); 
             });
+
+            container.classList.add('artists-container');
         });
         
     } catch (error) {
@@ -260,7 +263,7 @@ export async function fetchArtists(artist, loadMore = false) {
 let loading = false;
 
 export function fetchMoreArtists() {
-    if (container.scrollHeight - container.scrollTop - container.clientHeight < 32 && !loading) {
+    if (container.scrollHeight - container.scrollTop - container.clientHeight < 32 && !loading && container.classList.contains('artists-container')) {
         loading = true;
         offset += 30;
         fetchArtists(searchBar.value, true);
