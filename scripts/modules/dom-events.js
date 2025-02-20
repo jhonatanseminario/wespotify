@@ -37,11 +37,18 @@ export function DOMLoaded() {
         clearIcon.on('click', () => {
             setLastSearchQuery(searchBar.value);
             searchBar.value = '';
-            clearIcon.style.display = 'none';
+            clearIcon.style.opacity = '0';
+            clearIcon.style.pointerEvents = 'none';
         });
 
         searchBar.on('input', () => {
-            clearIcon.style.display = searchBar.value ? 'inline' : 'none';
+            if (searchBar.value) {
+                clearIcon.style.opacity = '1';
+                clearIcon.style.pointerEvents = 'auto';
+            } else {
+                clearIcon.style.opacity = '0';
+                clearIcon.style.pointerEvents = 'none';
+            }
         });
 
         searchBar.on('input', debouncedHandler);

@@ -49,7 +49,7 @@ body {
 /**==========================================================================**/
 
 .search-container {
-    min-width: 600px;
+    min-width: 620px;
 }
 
 .search-bar {
@@ -111,7 +111,8 @@ body {
 }
 
 .clear-icon {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
     right: 70px;
     transition: filter .1s, transform .1s;
 
