@@ -261,12 +261,18 @@ export async function fetchArtists(artist, loadMore = false) {
 //*==========================================================================*//
 
 let loading = false;
+let lastSearchQuery = '';
+
+export function setLastSearchQuery(query) {
+    lastSearchQuery = query;
+}
 
 export function fetchMoreArtists() {
     if (container.scrollHeight - container.scrollTop - container.clientHeight < 32 && !loading && container.classList.contains('artists-container')) {
         loading = true;
         offset += 30;
-        fetchArtists(searchBar.value, true);
+        const query = searchBar.value || lastSearchQuery;
+        fetchArtists(query, true);
         setTimeout(() => loading = false, 1000);
     }
 }
