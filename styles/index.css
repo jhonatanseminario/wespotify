@@ -191,6 +191,16 @@ body {
         position: absolute;
         width: 100%;
     }
+    
+    &::after {
+        content: '';
+        background: linear-gradient(var(--artist-gradient-color), transparent);
+        bottom: -175px;
+        height: 175px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+    } 
 }
 
 .profile-artist-name {

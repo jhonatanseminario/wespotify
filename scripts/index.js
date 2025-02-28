@@ -4,6 +4,7 @@
 
 import { getToken } from './modules/access-token.js';
 import { DOMLoaded, searchBar, clearIcon, container } from './modules/dom-events.js';
+import { getAverageColor } from './modules/utilities.js';
 
 DOMLoaded();
 
@@ -148,7 +149,13 @@ export async function fetchArtistDetails(artistID) {
 
         container.appendChild(artistTopTracksContainer);
 
+        // OTROS EVENTOS
         document.title = `${data.name} | Wespotify`;
+
+        getAverageColor(imageUrl, (color) => {
+            const rgbaColor = color.replace('rgb', 'rgba').replace(')', ', 0.3)');
+            artistImage.style.setProperty('--artist-gradient-color', rgbaColor);
+        });
 
     } catch (error) {
         console.error('Error fetching artist details:', error);

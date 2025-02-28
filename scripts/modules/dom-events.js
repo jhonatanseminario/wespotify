@@ -4,7 +4,7 @@
 
 import { $ } from './helpers.js';
 import { fetchMoreArtists, fetchTopArtists, setLastSearchQuery } from '../index.js';
-import { debouncedHandler } from './debouncing.js';
+import { debouncedHandler } from './utilities.js';
 
 
 //*==========================================================================*//
