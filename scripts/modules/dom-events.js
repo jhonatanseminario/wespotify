@@ -28,7 +28,8 @@ export function DOMLoaded() {
 
         spotifyIcon.on('click', () => {
             searchBar.value = '';
-            clearIcon.style.display = 'none';
+            clearIcon.style.opacity = '0';
+            clearIcon.style.pointerEvents = 'none';
             container.innerHTML = '';
             container.classList.remove('artists-container');
             fetchTopArtists();
