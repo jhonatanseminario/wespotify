@@ -116,12 +116,12 @@ export async function fetchArtistDetails(artistID) {
 
         artistName.className = 'profile-artist-name';
         artistName.textContent = `${data.name}`;
-        if (data.name.length > 23) {
+        if (data.name.length > 32) {
             artistName.classList.add('long-artist-name');
         }
 
         artistFollowers.className = 'profile-artist-followers';
-        artistFollowers.textContent = `${data.followers.total} seguidores`;
+        artistFollowers.textContent = `${data.followers.total.toLocaleString()} seguidores`;
 
         // LLAMAR FUNCIÓN PARA BUSCAR PISTAS MÁS POPULARES
         const artistTopTracksArray = await fetchArtistTopTracks(artistID);
@@ -142,8 +142,8 @@ export async function fetchArtistDetails(artistID) {
 
         // AGREGAR ELEMENTOS
         container.appendChild(artistImage);
-        container.appendChild(artistName);
-        container.appendChild(artistFollowers);
+        artistImage.appendChild(artistName);
+        artistImage.appendChild(artistFollowers);
 
         container.appendChild(artistTopTracksContainer);
 
