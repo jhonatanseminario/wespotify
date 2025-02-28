@@ -72,7 +72,8 @@ export async function fetchTopArtists() {
             // AGREGAR EVENTOS A LOS ELEMENTOS
             topArtistCard.on('click', () => {
                 searchBar.value = '';
-                clearIcon.style.display = 'none';
+                clearIcon.style.opacity = '0';
+                clearIcon.style.pointerEvents = 'none';
                 container.innerHTML = '';
                 fetchArtistDetails(artist.id); 
             });
@@ -146,6 +147,8 @@ export async function fetchArtistDetails(artistID) {
         artistImage.appendChild(artistFollowers);
 
         container.appendChild(artistTopTracksContainer);
+
+        document.title = `${data.name} | Wespotify`;
 
     } catch (error) {
         console.error('Error fetching artist details:', error);

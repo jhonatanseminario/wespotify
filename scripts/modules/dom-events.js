@@ -32,6 +32,7 @@ export function DOMLoaded() {
             clearIcon.style.pointerEvents = 'none';
             container.innerHTML = '';
             container.classList.remove('artists-container');
+            document.title = 'Wespotify - Música para todos';
             fetchTopArtists();
         });
 
@@ -43,6 +44,7 @@ export function DOMLoaded() {
         });
 
         searchBar.on('input', () => {
+            document.title = 'Wespotify - Buscar';
             if (searchBar.value) {
                 clearIcon.style.opacity = '1';
                 clearIcon.style.pointerEvents = 'auto';
