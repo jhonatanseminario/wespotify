@@ -229,7 +229,13 @@ body {
 }
 
 .profile-artist-tracks {
+    padding: 32px;
     position: absolute;
     top: 320px;
     width: 100%;
+}
+
+.top-track {
+    padding: 16px;
+    text-align: left;
 }
