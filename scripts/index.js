@@ -56,7 +56,7 @@ export async function fetchTopArtists() {
 
             topArtistImage.className = 'artist-image';
             topArtistImage.src = artist.imageUrl;
-            topArtistImage.alt = artist.name;
+            topArtistImage.setAttribute('aria-label', artist.name);
             topArtistImage.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
             topArtistImage.style.animation = 'fadeIn .2s ease-in-out forwards';
     
@@ -232,7 +232,7 @@ export async function fetchArtists(artist, loadMore = false) {
 
             artistImage.className = 'artist-image';
             artistImage.src = artist.imageUrl;
-            artistImage.alt = artist.name;
+            artistImage.setAttribute('aria-label', artist.name);
             if (!artist.imageUrl.includes('/assets/icons/artist-fallback-icon.svg')) {
                 artistImage.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
             }
