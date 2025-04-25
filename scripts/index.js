@@ -135,11 +135,47 @@ export async function fetchArtistDetails(artistID) {
         artistTopTracksTitle.className = 'profile-artist-tracks-title';
         artistTopTracksTitle.textContent = 'Popular';
         
-        artistTopTracksArray.forEach(track => {
+        artistTopTracksArray.forEach((track, index) => {
             const topTrack = document.createElement('div');
-            
             topTrack.className = 'top-track';
-            topTrack.textContent = track.name;
+
+            const trackIndex = document.createElement('div');
+            const trackImage = document.createElement('img');
+            const trackInfo = document.createElement('div');
+
+            const trackName = document.createElement('div');
+            const trackPopularity = document.createElement('div');
+            const trackDuration = document.createElement('div');
+
+
+            trackIndex.className = 'top-track-index';
+            trackIndex.textContent = `${index + 1}`;
+
+            trackImage.className = 'top-track-image';
+            trackImage.src = track.album.images[2]?.url || '/assets/icons/track-fallback-icon.svg';
+            trackImage.alt = track.name;
+
+            trackInfo.className = 'top-track-info';
+
+            trackName.className = 'top-track-name';
+            trackName.textContent = track.name;
+
+            trackPopularity.className = 'top-track-popularity';
+            trackPopularity.textContent = `Nivel de popularidad: ${track.popularity}%`;
+
+            trackDuration.className = 'top-track-duration';
+            const minutes = Math.floor(track.duration_ms / 60000);
+            const seconds = Math.floor((track.duration_ms % 60000) / 1000).toString().padStart(2, '0');
+            trackDuration.textContent = `${minutes}:${seconds}`;
+
+
+            trackInfo.appendChild(trackName);
+            trackInfo.appendChild(trackPopularity);
+            trackInfo.appendChild(trackDuration);
+
+            topTrack.appendChild(trackIndex);
+            topTrack.appendChild(trackImage);
+            topTrack.appendChild(trackInfo);
             
             artistTopTracksContainer.appendChild(topTrack);
         });
