@@ -130,6 +130,10 @@ export async function fetchArtistDetails(artistID) {
         
         const artistTopTracksContainer = document.createElement('div');
         artistTopTracksContainer.className = 'profile-artist-tracks';
+
+        const artistTopTracksTitle = document.createElement('div');
+        artistTopTracksTitle.className = 'profile-artist-tracks-title';
+        artistTopTracksTitle.textContent = 'Popular';
         
         artistTopTracksArray.forEach(track => {
             const topTrack = document.createElement('div');
@@ -147,6 +151,7 @@ export async function fetchArtistDetails(artistID) {
         artistImage.appendChild(artistName);
         artistImage.appendChild(artistFollowers);
 
+        artistTopTracksContainer.appendChild(artistTopTracksTitle);
         container.appendChild(artistTopTracksContainer);
 
         // OTROS EVENTOS

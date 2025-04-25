@@ -210,9 +210,10 @@ body {
 
 .profile-artist-name {
     animation: fadeIn .4s ease-in-out forwards;
-    bottom: 60px;
+    bottom: 58px;
     font-size: 6rem;
     font-weight: 800;
+    left: -8px;
     padding-inline: 32px;
     position: absolute;
     text-align: left;
@@ -226,21 +227,34 @@ body {
 
 .profile-artist-followers {
     animation: fadeIn .2s ease-in-out forwards;
+    left: -8px;
     padding-inline: 32px;
     position: absolute;
     text-align: left;
-    bottom: 32px;
+    bottom: 30px;
     width: 100%;
 }
 
 .profile-artist-tracks {
     padding: 32px;
     position: absolute;
-    top: 320px;
+    top: 48vh;
     width: 100%;
 }
 
+.profile-artist-tracks-title {
+    font-size: 24px;
+    font-weight: 700;
+    left: 24px;
+    position: absolute;
+    top: -8px;
+}
+
 .top-track {
-    padding: 16px;
+    padding: 16px 16px 16px 96px;
     text-align: left;
+
+    &:first-child {
+        margin-top: 8px;
+    }
 }
