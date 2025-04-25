@@ -161,7 +161,7 @@ export async function fetchArtistDetails(artistID) {
             trackName.textContent = track.name;
 
             trackPopularity.className = 'top-track-popularity';
-            trackPopularity.textContent = `Nivel de popularidad: ${track.popularity}%`;
+            trackPopularity.textContent = `Popularidad del ${track.popularity}%`;
 
             trackDuration.className = 'top-track-duration';
             const minutes = Math.floor(track.duration_ms / 60000);

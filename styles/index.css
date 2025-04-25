@@ -236,7 +236,7 @@ body {
 }
 
 .profile-artist-tracks {
-    padding: 32px;
+    padding: 48px 64px;
     position: absolute;
     top: 48vh;
     width: 100%;
@@ -245,16 +245,62 @@ body {
 .profile-artist-tracks-title {
     font-size: 24px;
     font-weight: 700;
-    left: 24px;
+    left: 48px;
     position: absolute;
     top: -8px;
 }
 
 .top-track {
-    padding: 16px 16px 16px 96px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 32px 8px 8px;
     text-align: left;
+    width: 100%;
 
     &:first-child {
         margin-top: 8px;
     }
+}
+
+.top-track-index {
+    color: rgb(179, 179, 179);
+    margin-right: 24px;
+    text-align: right;
+    width: 16px;
+}
+
+.top-track-image {
+    border-radius: 4px;
+    height: 40px;
+    margin-right: 16px;
+    width: 40px;
+}
+
+.top-track-info {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.top-track-name {
+    margin-right: 16px;
+    min-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 400px;
+}
+
+.top-track-popularity {
+    color: rgb(179, 179, 179);
+    font-size: 14px;
+    min-width: 160px;
+    width: 160px;
+}
+
+.top-track-duration {
+    color: rgb(179, 179, 179);
+    font-size: 14px;
 }
