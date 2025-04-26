@@ -175,7 +175,7 @@ body {
 
 
 /**==========================================================================**/
-/**                            PERFIL DE ARTISTA                             **/
+/**                       PORTADA DEL PERFIL DE ARTISTA                      **/
 /**==========================================================================**/
 
 .profile-artist-image {
@@ -199,6 +199,7 @@ body {
     
     &::after {
         content: '';
+        animation: fadeIn 1.2s ease-in-out forwards;
         background: linear-gradient(var(--artist-gradient-color), transparent);
         bottom: -175px;
         height: 175px;
@@ -235,7 +236,13 @@ body {
     width: 100%;
 }
 
+
+/**==========================================================================**/
+/**                  PISTAS DESTACADAS DEL PERFIL DE ARTISTA                 **/
+/**==========================================================================**/
+
 .profile-artist-tracks {
+    animation: fadeIn 1.6s ease-in-out forwards;
     padding: 48px 64px;
     position: absolute;
     top: 48vh;
@@ -252,6 +259,7 @@ body {
 
 .top-track {
     align-items: center;
+    border-radius: 4px;
     display: flex;
     justify-content: space-between;
     padding: 8px 32px 8px 8px;
@@ -260,6 +268,24 @@ body {
 
     &:first-child {
         margin-top: 8px;
+    }
+
+    &:hover {
+        background-color: rgb(255 255 255 / .1);
+
+        .top-track-popularity,
+        .top-track-duration {
+            color: rgb(255, 255, 255);
+        }
+    }
+}
+
+.top-track.active {
+    background-color: rgb(255 255 255 / .3);
+
+    .top-track-popularity,
+    .top-track-duration {
+        color: rgb(255, 255, 255);
     }
 }
 

@@ -57,6 +57,12 @@ export function DOMLoaded() {
         searchBar.on('input', debouncedHandler);
         container.on('scroll', fetchMoreArtists);
 
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.top-track.active').forEach( el => {
+                el.classList.remove('active');
+            });
+        });        
+
         fetchTopArtists();
     });
 }

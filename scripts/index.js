@@ -153,7 +153,8 @@ export async function fetchArtistDetails(artistID) {
 
             trackImage.className = 'top-track-image';
             trackImage.src = track.album.images[2]?.url || '/assets/icons/track-fallback-icon.svg';
-            trackImage.alt = track.name;
+            trackImage.alt = track.album.name;
+            trackImage.title = track.album.name;
 
             trackInfo.className = 'top-track-info';
 
@@ -168,6 +169,16 @@ export async function fetchArtistDetails(artistID) {
             const seconds = Math.floor((track.duration_ms % 60000) / 1000).toString().padStart(2, '0');
             trackDuration.textContent = `${minutes}:${seconds}`;
 
+            topTrack.addEventListener('click', event => {
+                event.stopPropagation();
+            
+                document.querySelectorAll('.top-track.active').forEach( el => {
+                    el.classList.remove('active');
+                });
+            
+                topTrack.classList.add('active');
+            });
+            
 
             trackInfo.appendChild(trackName);
             trackInfo.appendChild(trackPopularity);
