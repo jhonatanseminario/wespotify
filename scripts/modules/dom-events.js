@@ -26,7 +26,12 @@ export function DOMLoaded() {
         document.on('dragstart', (event) => event.preventDefault());
         document.on('contextmenu', (event) => event.preventDefault());
 
+        let canClick = true;
+
         spotifyIcon.on('click', () => {
+            if (!canClick) return;
+            canClick = false;
+
             searchBar.value = '';
             clearIcon.style.opacity = '0';
             clearIcon.style.pointerEvents = 'none';
@@ -34,6 +39,10 @@ export function DOMLoaded() {
             container.classList.remove('artists-container');
             document.title = 'Wespotify - Música para todos';
             fetchTopArtists();
+
+            setTimeout(() => {
+                canClick = true;
+            }, 1000);
         });
 
         clearIcon.on('click', () => {

@@ -133,6 +133,11 @@ body {
     left: 28px;
     position: absolute;
     top: 16px;
+    transition: opacity .3s ease;
+
+    &:hover {
+        opacity: .85;
+    }
 }
 
 
