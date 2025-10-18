@@ -3,7 +3,7 @@
 //!==========================================================================!//
 
 import { $ } from './helpers.js';
-import { fetchMoreArtists, fetchTopArtists, setLastSearchQuery } from '../index.js';
+import { fetchMoreArtists, fetchTopArtists, setLastSearchQuery } from './index.js';
 import { debouncedHandler } from './utilities.js';
 
 

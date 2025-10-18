@@ -2,10 +2,10 @@
 /*!                             IMPORTAR ESTILOS                             !*/
 /*!==========================================================================!*/
 
-@import '/styles/reset.css';
-@import '/styles/fonts.css';
-@import '/styles/animations.css';
-@import '/styles/custom-properties.css';
+@import '/css/reset.css';
+@import '/css/fonts.css';
+@import '/css/animations.css';
+@import '/css/custom-properties.css';
 
 
 /**==========================================================================**/
@@ -15,7 +15,7 @@
 body {
     background-color: black;
     color: white;
-    font-family: 'Spotify Mix', sans-serif;
+    font-family: 'Spotify Mix Title', sans-serif;
     height: 100vh;
     text-align: center;
     user-select: none;

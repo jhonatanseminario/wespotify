@@ -3,7 +3,7 @@
 //!==========================================================================!//
 
 import { container } from './dom-events.js';
-import { fetchArtists } from '../index.js';
+import { fetchArtists } from './index.js';
 
 
 //*==========================================================================*//

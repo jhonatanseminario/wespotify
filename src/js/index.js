@@ -2,9 +2,9 @@
 //!                             IMPORTAR MÓDULOS                             !//
 //!==========================================================================!//
 
-import { getToken } from './modules/access-token.js';
-import { DOMLoaded, searchBar, clearIcon, container } from './modules/dom-events.js';
-import { getAverageColor } from './modules/utilities.js';
+import { getToken } from './access-token.js';
+import { DOMLoaded, searchBar, clearIcon, container } from './dom-events.js';
+import { getAverageColor } from './utilities.js';
 
 DOMLoaded();
 
@@ -32,7 +32,7 @@ export async function fetchTopArtists() {
 
         data.tracks.items.forEach(({ track }) => {
             const { id, name } = track.artists[0];
-            const imageUrl = track.album.images[1]?.url || '/assets/icons/artist-fallback-icon.svg';
+            const imageUrl = track.album.images[1]?.url || '/assets/images/artist-fallback-icon.svg';
         
             if (!topArtistsArray.some(artist => artist.id === id)) {
                 topArtistsArray.push({ id, name, imageUrl });
@@ -113,7 +113,7 @@ export async function fetchArtistDetails(artistID) {
 
         // MODIFICAR ELEMENTOS
         artistImage.className = 'profile-artist-image';
-        const imageUrl = data.images[0]?.url || '/assets/icons/artist-fallback-icon.svg';
+        const imageUrl = data.images[0]?.url || '/assets/images/artist-fallback-icon.svg';
         artistImage.style.backgroundImage = `url(${imageUrl})`;
 
         artistName.className = 'profile-artist-name';
@@ -265,7 +265,7 @@ export async function fetchArtists(artist, loadMore = false) {
         
         data.artists.items.forEach((artist) => {
             const { id, name } = artist;
-            const imageUrl = artist.images[1]?.url || '/assets/icons/artist-fallback-icon.svg';
+            const imageUrl = artist.images[1]?.url || '/assets/images/artist-fallback-icon.svg';
             artistsArray.push({ id, name, imageUrl });
         });
 
@@ -285,7 +285,7 @@ export async function fetchArtists(artist, loadMore = false) {
             artistImage.className = 'artist-image';
             artistImage.src = artist.imageUrl;
             artistImage.setAttribute('aria-label', artist.name);
-            if (!artist.imageUrl.includes('/assets/icons/artist-fallback-icon.svg')) {
+            if (!artist.imageUrl.includes('/assets/images/artist-fallback-icon.svg')) {
                 artistImage.style.backgroundColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
             }
             artistImage.style.animation = 'fadeIn .2s ease-in-out forwards';

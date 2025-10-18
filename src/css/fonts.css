@@ -4,10 +4,10 @@
 
 @font-face {
     font-family: 'Spotify Mix';
-    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
+    src: url('../assets/fonts/spotify-mix-ui/spotify-mix-ui-regular.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Spotify Mix Title';
-    src: url('/assets/fonts/spotify-mix-title.woff2') format('woff2');
+    src: url('../assets/fonts/spotify-mix-ui-title/spotify-mix-ui-title-variable.woff2') format('woff2');
 }
